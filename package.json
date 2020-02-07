@@ -1,15 +1,19 @@
 {
-  "name": "Anagrammatix",
-  "description": "Anagram Multiplayer Game",
+  "name": "fibbage-tribute",
+  "description": "Fork of Fibbage Tribute",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "express": "3.x",
+    "mysql2": "^2.1.0",
+    "nunjucks": "^3.2.0",
     "request": "^2.88.0",
     "socket.io": "0.9"
   },
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  },
   "scripts": {
     "test": "node index.js",
     "start": "node index.js"

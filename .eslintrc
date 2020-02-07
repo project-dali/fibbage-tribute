@@ -1,0 +1,40 @@
+{
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true,
+		"jquery": true
+	},
+	"extends": "eslint:recommended",
+	"globals": {
+		"require": true,
+		"module": true,
+		"$": true
+	},
+	"rules": {
+		"no-console": 0,
+		"no-global-assign": [
+			"warn",
+			{
+				"exceptions": [
+					"Object"
+				]
+			}
+		],
+		"no-unused-vars": [
+			"warn"
+		],
+		"indent": [
+			"warn",
+			"tab"
+		],
+		"quotes": [
+			"warn",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	}
+}

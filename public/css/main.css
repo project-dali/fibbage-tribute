@@ -1,0 +1,769 @@
+/*  How to import all CSS files:  */
+/* @import url("imports/**.css"); */
+@import url("imports/debug-nav.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gray-bg-color: #F1F1F1;
+    --gray-bg-hover: #c2c2c2;
+    --dark-gray: #333;
+    --pl-red: #EB5757;
+    --pl-orange: #F2994A;
+    --pl-yellow: #F2C94C;
+    --pl-green: #219653;
+    --pl-blue: #2F80ED;
+    --pl-mediumBlue: #2D9CDB;
+    --pl-lightGreen: #6FCF97;
+    --pl-purple: #A157FF;
+    --pl-magenta: #F25AF5;
+    --pl-teal: #62EDE5;
+    --pl-lime: #DAEB70;
+    --pl-violet: #6F4FED;
+    --thunk-pink: #ED1968;
+}
+
+html {
+    font-size: 100%;
+    /* Set font size to user preference */
+    font-family: Arial, Helvetica, sans-serif;
+    /* Websafe */
+}
+
+body {
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    text-align: center;
+}
+
+h1 {
+    font-size: 6rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+#splash {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#splash>h1 {
+    font-size: 9rem;
+}
+
+main {
+    --main-padding: 3rem;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--main-padding);
+    position: relative;
+}
+
+button {
+    max-width: 20rem;
+    /*! height: 5rem; */
+
+    /* clear defaults */
+    background: none;
+    box-shadow: none;
+    border: none;
+
+    background-color: var(--gray-bg-color, LightGrey);
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    padding: 1rem 3rem;
+}
+
+button:hover,
+button:active,
+button:focus {
+    cursor: pointer;
+    background-color: var(--gray-bg-hover, gray);
+}
+
+button:focus {
+    outline: 5px solid var(--thunk-pink, pink);
+}
+
+/* Applies a gray background to the element */
+.box-gray {
+    background-color: var(--gray-bg-color, LightGrey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+}
+
+.box-gray * {
+    margin: 0;
+    text-align: center;
+}
+
+.switch-up p {
+    text-align: center;
+    font-weight: bold;
+    font-size: 3rem;
+    margin: 2rem 0;
+}
+
+.room-code-display {
+    position:absolute;
+    top:100vh; right: 0;
+    transform:translateY(-100%);
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.round-progress-bar {
+    width: 80vw;
+    max-width: 60rem;
+    height: 3rem;
+    padding: 0;
+    margin-top: 3em;
+}
+
+.timer-bar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--thunk-pink, pink);
+}
+
+/* ! Code from alpha static ------------------------------------ */
+
+#instructions {
+    max-width: 49.375rem;
+}
+
+#instructions>p {
+    font-size: 2.75rem;
+    line-height: 2;
+}
+
+#code,
+#prompt {
+    /* min-width: 40rem; */
+    max-width: 60rem;
+}
+
+#code>p {
+    font-size: 4.5rem;
+    font-weight: bold;
+}
+
+#connected-players {
+    max-width: 90%;
+    height: 17rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.player {
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.pl-avi {
+    --avi-size: 5.25rem;
+    content: "";
+    display: block;
+    width: var(--avi-size);
+    height: var(--avi-size);
+    background-color: #000;
+    margin-bottom: .25rem;
+    border-radius: 50%;
+}
+
+/* ! Remove this once avatar selection feauture is created */
+#player-1>.pl-avi {
+    background-color: var(--pl-red, Red);
+}
+
+#player-2>.pl-avi {
+    background-color: var(--pl-orange, Orange);
+}
+
+#player-3>.pl-avi {
+    background-color: var(--pl-yellow, Yellow);
+}
+
+#player-4>.pl-avi {
+    background-color: var(--pl-green, Green);
+}
+
+#player-5>.pl-avi {
+    background-color: var(--pl-blue, Blue);
+}
+
+#player-6>.pl-avi {
+    background-color: var(--pl-mediumBlue, CornflowerBlue);
+}
+
+#player-7>.pl-avi {
+    background-color: var(--pl-lightGreen, LightGreen);
+}
+
+#player-8>.pl-avi {
+    background-color: var(--pl-purple, Purple);
+}
+
+/* ! ------------------------------------------------- */
+
+.pl-name {
+    font-weight: bold;
+}
+
+#top-player {
+    margin: 3rem 0;
+}
+
+#top-player .player {
+    width: 12rem;
+}
+
+#top-player .pl-avi {
+    width: 8rem;
+    height: 8rem;
+}
+
+#top-player .pl-name {
+    font-size: 2rem;
+}
+
+#prompt-instructions>h3,
+#switch-up>h3 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 2rem 0 .5rem;
+    text-transform: uppercase;
+}
+
+#prompt-instructions>p,
+#switch-up>p,
+#prompt>p {
+    font-size: 1.5rem;
+}
+
+#resp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 80%;
+    max-width: 60rem;
+    grid-gap: 1rem;
+    margin-top: 3rem;
+    align-items: center;
+}
+
+#top-answer h2 {
+    font-size: 4rem;
+}
+
+#standings {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 2rem;
+    list-style: none;
+    counter-reset: thunk-counter;
+}
+
+#standings>li {
+    margin-bottom: 1rem;
+    counter-increment: thunk-counter;
+    position: relative;
+    margin-left: 1.5rem;
+}
+
+#standings>li::before {
+    content: counter(thunk-counter);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: absolute;
+    --counter-size: 1.75rem;
+    left: calc(-1 * var(--counter-size) + .5rem);
+    line-height: var(--counter-size);
+    width: var(--counter-size);
+    height: var(--counter-size);
+    top: calc(50% - var(--counter-size)/2);
+    background: var(--dark-gray);
+    border-radius: 50%;
+    text-align: center;
+}
+
+#standings .player {
+    display: grid;
+    grid-template-columns: 5.25rem auto;
+    grid-template-rows: 2.25rem auto;
+    grid-template-areas:
+        "pl-avi pl-name"
+        "pl-avi pl-score";
+    width: 16rem;
+    grid-gap: 0.5rem;
+    align-items: unset;
+}
+
+#standings .pl-avi {
+    grid-area: pl-avi;
+    margin-bottom: 0;
+}
+
+#standings .pl-name {
+    margin-top: .5rem;
+    font-size: 1.5rem;
+}
+
+#standings .pl-score {
+    font-size: 1.25rem;
+}
+
+#pl-winner {
+    margin-top: 10rem;
+    /* justify-self: center does not work for flex, find solution to vertically center */
+}
+
+#pl-winner .player {
+    width: 40rem;
+}
+
+#pl-winner .pl-avi {
+    --winner-avi-size: 16rem;
+    width: var(--winner-avi-size);
+    height: var(--winner-avi-size);
+}
+
+#pl-winner .pl-name {
+    font-size: 3rem;
+}
+
+#credits {
+    flex-direction: row;
+}
+
+#game-cred,
+#replay {
+    width: 50%;
+    height: calc(100% + var(--main-padding));
+    margin-top: calc(-1 * var(--main-padding));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-cred {
+    background: var(--gray-bg-color);
+}
+
+#game-cred h3,
+#game-cred section {
+    margin: 1rem;
+}
+
+.team-member {
+    display: grid;
+    grid-template-columns: 7rem 15rem;
+    grid-gap: 1rem .5rem;
+}
+
+.tm-name {
+    text-align: right;
+    font-weight: bold;
+}
+
+.tm-role {
+    list-style: none;
+}
+
+/* * -------- Player Screen Styles -------- */
+@media screen and (max-width: 26rem) {
+    h1 {
+        font-size: 3.5rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: .5rem;
+    }
+
+    .input-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    input[type=text] {
+        width: 13.75rem;
+        height: 2.625rem;
+        background-color: var(--gray-bg-color, LightGrey);
+        border: none;
+        border: 2px solid #000;
+
+        text-align: center;
+        font-size: 1.5rem;
+        position: relative;
+    }
+
+    input[type=text]:focus {
+        outline: 3px solid #000;
+    }
+
+    input[type=text]:invalid {
+        outline: 4px solid var(--pl-red, red);
+    }
+
+    input[type=submit] {
+        width: 15rem;
+
+        /* Clear defaults */
+        background: none;
+        box-shadow: none;
+        border: none;
+
+        background-color: var(--gray-bg-color, LightGrey);
+        font-size: 2rem;
+        padding: .5rem;
+    }
+
+    input[type=submit]:hover,
+    input[type=submit]:active,
+    input[type=submit]:focus {
+        outline: 3px solid var(--thunk-pink, pink);
+        cursor: pointer;
+        background-color: var(--gray-bg-hover, gray);
+    }
+
+    #avi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .avi-opt {
+        --avi-sel-size: 4.5rem;
+        display: block;
+        position: relative;
+        width: var(--avi-sel-size);
+        height: var(--avi-sel-size);
+        /* background-color: #000; */
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide browswer default radio */
+    .avi-opt input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create custom radio */
+    .avi-check {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: var(--avi-sel-size);
+        width: var(--avi-sel-size);
+        background-color: #eee;
+        border-radius: 50%;
+    }
+
+    #avi-red~.avi-check {
+        background-color: var(--pl-red, red);
+    }
+
+    #avi-orange~.avi-check {
+        background-color: var(--pl-orange, orange);
+    }
+
+    #avi-yellow~.avi-check {
+        background-color: var(--pl-yellow, yellow);
+    }
+
+    #avi-green~.avi-check {
+        background-color: var(--pl-green, green);
+    }
+
+    #avi-blue~.avi-check {
+        background-color: var(--pl-blue, blue);
+    }
+
+    #avi-mediumBlue~.avi-check {
+        background-color: var(--pl-mediumBlue, CornflowerBlue);
+    }
+
+    #avi-lightGreen~.avi-check {
+        background-color: var(--pl-lightGreen, LightGreen);
+    }
+
+    #avi-purple~.avi-check {
+        background-color: var(--pl-purple, Purple)
+    }
+
+    #avi-magenta~.avi-check {
+        background-color: var(--pl-magenta, magenta);
+    }
+
+    #avi-teal~.avi-check {
+        background-color: var(--pl-teal, teal);
+    }
+
+    #avi-lime~.avi-check {
+        background-color: var(--pl-lime, lime);
+    }
+
+    #avi-violet~.avi-check {
+        background-color: var(--pl-violet, violet);
+    }
+
+    .avi-opt input:checked~.avi-check {
+        border: 8px solid rgba(0, 0, 0, .5);
+    }
+
+    .pl-submit {
+        position: absolute;
+        bottom: 2rem;
+        transform-origin: center;
+    }
+
+    #pl-instructions {
+        width: 80%;
+        margin-left: 1.2rem;
+        margin-top: 1rem;
+    }
+
+    #pl-instructions li {
+        margin-bottom: .5rem;
+    }
+
+    #prompt {
+        min-width: unset;
+        max-width: unset;
+    }
+
+    #prompt>p,
+    #switch-up>p {
+        width: 16rem;
+    }
+
+    #switch-up>p:first-of-type {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 1rem 0
+    }
+
+    #counter {
+        --counter-size: 6rem;
+        position: absolute;
+        bottom: 2rem;
+        background-color: var(--gray-bg-hover, gray);
+        width: var(--counter-size);
+        height: var(--counter-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        ;
+    }
+
+    #counter p {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    #timer {
+        position: static;
+        height: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    #prompt-display,
+    #submissions {
+        max-width: 80%;
+        margin-bottom: 1rem;
+    }
+
+    #submissions {
+        flex-direction: column;
+    }
+
+    #submissions p {
+        margin: .25rem 0;
+    }
+
+    .text-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 16rem;
+    }
+
+    .text-wrap input {
+        width: 100%;
+        text-align: left;
+        font-size: 1rem;
+        padding: .5rem;
+        margin-bottom: .25rem;
+    }
+
+    p.subtext {
+        font-size: .8em;
+        color: var(--dark-gray, gray)
+    }
+
+    form {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .resp-opt {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        margin: .5rem auto;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 14rem;
+    }
+
+    /* Hide browser default checkboxes */
+    .resp-opt input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .resp-check {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: none;
+    }
+
+    .resp-opt input:checked~.resp-check {
+        border: 3px solid var(--thunk-pink, pink);
+    }
+
+    #round h1 {
+        font-size: 2rem;
+    }
+
+    #standings {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pl-avi {
+        --avi-size-mobile: 3rem;
+        width: var(--avi-size-mobile);
+        height: var(--avi-size-mobile);
+    }
+
+    #standings .player {
+        grid-template-columns: 3rem auto;
+        grid-template-rows: 1.5rem auto;
+        grid-gap: .125rem;
+        width: auto;
+        margin: 0 0 0 .75rem;
+    }
+
+    #standings .pl-name,
+    #standings .pl-score {
+        font-size: 1rem;
+    }
+
+    #standings .pl-name {
+        margin-top: .25rem;
+    }
+
+    #standings>li {
+        margin-bottom: .5rem;
+        width: 14rem;
+    }
+
+    #standings>li::before {
+        font-size: .75rem;
+        --counter-mobile-size: 1.25rem;
+        left: calc(-1 * var(--counter-mobile-size) + .5rem);
+        line-height: var(--counter-mobile-size);
+        width: var(--counter-mobile-size);
+        height: var(--counter-mobile-size);
+        top: calc(50% - var(--counter-mobile-size)/2)
+    }
+
+    #rank-msg {
+        margin-bottom: 1rem;
+    }
+
+    .player-rank {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2rem auto;
+    }
+
+    .player-rank .pl-avi {
+        --avi-rank-size: 10rem;
+        width: var(--avi-rank-size);
+        height: var(--avi-rank-size);
+    }
+
+    .player-rank .pl-name {
+        font-size: 1.5rem;
+    }
+}
