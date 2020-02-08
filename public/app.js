@@ -300,33 +300,18 @@ jQuery(function ($) {
 
 				// Display the URL on screen
 				$('#gameURL').text(window.location.href);
+				$('#gameURL').attr('href', window.location.href);
 				//App.doTextFit('#gameURL');
 
+				// put space halfway through gameId
+				let gameIdDisplay = String(App.gameId).slice(0, 3) + ' ' + String(App.gameId).slice(3);
+
 				// Show the gameId / room id on screen
-				$('#spanNewGameCode').text(App.gameId);
+				$('#spanNewGameCode').text(gameIdDisplay);
 			},
 
 			showTemplateNewGame: function () {
 				App.$gameArea.html(App.$templateNewGame);
-
-				var $flags = $('#flags');
-				Object.keys(Config.languages).forEach(code => {
-					var $flag = $('<img src="images/flags/' + Config.languages[code].flag_path + '">');
-					$flag.addClass('flag');
-					$flag.click(function () {
-						App.Host.selectFlag(this, code);
-					});
-					$flags.append($flag);
-				});
-
-				$('.flag')[0].click();
-			},
-
-			selectFlag: function ($flag, code) {
-				App.language = code;
-				console.log(code);
-				$('.flag').removeClass('selectedFlag');
-				$($flag).addClass('selectedFlag');
 			},
 
 			/**
@@ -351,7 +336,7 @@ jQuery(function ($) {
 			},
 
 			launchGame: function (data) {
-				IO.socket.emit('hostRoomFull', { gameId: App.gameId, language: App.language });
+				IO.socket.emit('hostRoomFull', { gameId: App.gameId, language: 'en' });
 			},
 
 			/**

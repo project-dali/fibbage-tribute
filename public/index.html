@@ -5,8 +5,7 @@
 	<meta charset="utf-8" />
 
 	<!-- Ensure that everything scales appropriately on a mobile device -->
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- Let's borrow a cool looking Font from Google -->
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
@@ -32,7 +31,6 @@
             </div>
 
             <div class="buttons">
-
                 <button id="btnCreateGame" class="btn left btnHome">CREATE</button>
                 <button id="btnJoinGame" class="btn right btnHome">JOIN</button>
                 <div style="clear:both"></div>
@@ -46,10 +44,9 @@
 	<script id="create-game-template" type="text/template">
         <div class="createGameWrapper">
 
-            <div class="info">Open this site on your mobile device:</div>
-            <div id="gameURL" class="infoBig">Error!</div>
+            <div class="info">Go to <a id="gameURL">Error!</a> on your player device</div>
 
-            <div class="info">Then click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
+            <div class="info">Click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
             <div id="spanNewGameCode" class="gameId">Error!</div>
 
             <div id=flags></div>
@@ -58,7 +55,7 @@
         </div>
     </script>
 
-	<!-- This scrreen appears when a player clicks "JOIN" on the Title Screen -->
+	<!-- This screen appears when a player clicks "JOIN" on the Title Screen -->
 	<script id="join-game-template" type="text/template">
         <div class="joinGameWrapper">
             <div class="info">
@@ -68,7 +65,7 @@
 
             <div class="info">
                 <label for="inputGameId">Game ID:</label>
-                <input id="inputGameId" type="text"/>
+                <input id="inputGameId" type="number"/>
             </div>
 
             <div class="info buttons">

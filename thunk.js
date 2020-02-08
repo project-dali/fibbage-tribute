@@ -58,8 +58,9 @@ function hostCreateNewGame() {
 	let createRoomID = () => {
 		let roomID = '';
 		for (let i = 0; i < 6; i++) {
-			roomID += Math.floor(Math.random() * 10);
+			roomID += String(Math.floor(Math.random() * 10));
 		}
+		roomID = parseInt(roomID);
 		return roomID;
 	};
 
@@ -117,6 +118,7 @@ function hostPrepareGame(data) {
 		return new Promise((resolve) => {
 			let query = `SELECT * FROM thunk.prompt 
 			WHERE round_type='think_twice'
+			ORDER BY RAND()
 			LIMIT ${amount};`;
 
 			db.sendQuery(query, connection, (err, results, fields) => {
@@ -293,19 +295,7 @@ function playerRestart(data) {
  * @param gameId The room identifier
  */
 function sendQuestion(wordPoolIndex, gameId) {
-	/*
-    const url = 'https://fibbage-tribute-questions.herokuapp.com/question/random?lan=' + Config.language;
-    request.get(url, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        let json = JSON.parse(body);
-        json.answer = json.solution;
-        json.round = wordPoolIndex;
 
-        io.sockets.in(gameId).emit('newQuestion', json);
-    });
-    */
 	var json = questions[wordPoolIndex];
 	json.answer = json.solution;
 	json.round = wordPoolIndex;

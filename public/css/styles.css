@@ -213,7 +213,7 @@ html, body {
 }
 
 .createGameWrapper #gameURL {
-    font-size: 4em;
+	font-weight: 700;
 }
 
 .createGameWrapper .gameId {
