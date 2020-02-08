@@ -1,8 +1,8 @@
 let io;
 let gameSocket;
 
-const request = require('request');
-var Config = require('./public/config.json');
+// const request = require('request');
+// var Config = require('./public/config.json');
 // const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // Import Database credentials and functions
@@ -194,13 +194,6 @@ function hostNextRound(data) {
  */
 function allPloysSent(data) {
 	var ploys = shuffle(data.ploys.slice());
-
-	// Pick a random spot in the decoy list to put the correct answer
-	var rnd = Math.floor(Math.random() * (ploys.length + 1));
-	ploys.splice(rnd, 0, {
-		playerId: 'answer',
-		value: data.answer
-	});
 
 	data.list = ploys;
 

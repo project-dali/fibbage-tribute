@@ -792,7 +792,7 @@ jQuery(function ($) {
 						.addClass('btn')
 						.val(this.value)
 						.html(this.value.toUpperCase());
-					console.log('temp', App.mySocketId, this.playerId, App.mySocketId == this.playerId);
+					// console.log('temp', App.mySocketId, this.playerId, App.mySocketId == this.playerId);
 					if (App.mySocketId == this.playerId)
 						$button.attr('disabled', 'disabled');
 					var $li = $('<li/>');
