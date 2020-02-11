@@ -12,7 +12,6 @@
 		"$": true
 	},
 	"rules": {
-		"eol-last": ["warn", "always"],
 		"no-console": 0,
 		"no-global-assign": [
 			"warn",

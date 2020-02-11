@@ -1,8 +1,8 @@
 let io;
 let gameSocket;
 
-// const request = require('request');
-// var Config = require('./public/config.json');
+const request = require('request');
+var Config = require('./public/config.json');
 // const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // Import Database credentials and functions
@@ -24,9 +24,7 @@ let questions = [];
 exports.initGame = function (sio, socket) {
 	io = sio;
 	gameSocket = socket;
-	gameSocket.emit('connected', {
-		message: 'You are connected!'
-	});
+	gameSocket.emit('connected', { message: 'You are connected!' });
 
 	// Host Events
 	gameSocket.on('hostCreateNewGame', hostCreateNewGame);
@@ -44,10 +42,10 @@ exports.initGame = function (sio, socket) {
 };
 
 /* *******************************
- *                             *
- *       HOST FUNCTIONS        *
- *                             *
- ******************************* */
+   *                             *
+   *       HOST FUNCTIONS        *
+   *                             *
+   ******************************* */
 
 /**
  * The 'START' button was clicked and 'hostCreateNewGame' event occurred.
@@ -56,7 +54,7 @@ function hostCreateNewGame() {
 	/**
 	 * generates random 6 digit room code
 	 * @returns string roomID
-	 */
+     */
 	let createRoomID = () => {
 		let roomID = '';
 		for (let i = 0; i < 6; i++) {
@@ -95,10 +93,7 @@ function hostCreateNewGame() {
 	let thisGameId = createRoomID();
 
 	// Return the Room ID (gameId) and the socket ID (mySocketId) to the browser client
-	this.emit('newGameCreated', {
-		gameId: thisGameId,
-		mySocketId: this.id
-	});
+	this.emit('newGameCreated', { gameId: thisGameId, mySocketId: this.id });
 
 	// Join the Room and wait for the players
 	this.join(thisGameId.toString());
@@ -213,10 +208,10 @@ function allPloysSent(data) {
 }
 
 /* *****************************
- *                           *
- *     PLAYER FUNCTIONS      *
- *                           *
- ***************************** */
+   *                           *
+   *     PLAYER FUNCTIONS      *
+   *                           *
+   ***************************** */
 
 /**
  * A player clicked the 'START GAME' button.
@@ -248,9 +243,7 @@ function playerJoinGame(data) {
 
 	} else {
 		// Otherwise, send an error message back to the player.
-		this.emit('error', {
-			message: 'This room does not exist.'
-		});
+		this.emit('error', { message: 'This room does not exist.' });
 	}
 }
 
@@ -295,10 +288,10 @@ function playerRestart(data) {
 }
 
 /* *************************
- *                       *
- *      GAME LOGIC       *
- *                       *
- ************************* */
+   *                       *
+   *      GAME LOGIC       *
+   *                       *
+   ************************* */
 
 /**
  * Get a word for the host, and a list of words for the player.
