@@ -4,11 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "express": "3.x",
+    "express": "^4.17.1",
     "mysql2": "^2.1.0",
     "nunjucks": "^3.2.0",
     "request": "^2.88.0",
-    "socket.io": "0.9"
+    "socket.io": "^2.3.0"
   },
   "main": "index.js",
   "devDependencies": {
@@ -20,12 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ericterpstra/anagrammatix.git"
+    "url": "https://github.com/project-dali/fibbage-tribute.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ericterpstra/anagrammatix/issues"
+    "url": "https://github.com/project-dali/fibbage-tribute/issues"
   },
-  "homepage": "https://github.com/ericterpstra/anagrammatix"
+  "homepage": "https://github.com/project-dali/fibbage-tribute"
 }
