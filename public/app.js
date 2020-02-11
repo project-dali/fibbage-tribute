@@ -6,25 +6,25 @@ jQuery(function ($) {
 	var Config = {};
 
 	/**
-	 * All the code relevant to Socket.IO is collected in the IO namespace.
-	 *
-	 * @type {{init: Function, bindEvents: Function, onConnected: Function, onNewGameCreated: Function, playerJoinedRoom: Function, beginNewGame: Function, onNewWordData: Function, hostCheckAnswer: Function, gameOver: Function, error: Function}}
-	 */
+     * All the code relevant to Socket.IO is collected in the IO namespace.
+     *
+     * @type {{init: Function, bindEvents: Function, onConnected: Function, onNewGameCreated: Function, playerJoinedRoom: Function, beginNewGame: Function, onNewWordData: Function, hostCheckAnswer: Function, gameOver: Function, error: Function}}
+     */
 	var IO = {
 
 		/**
-		 * This is called when the page is displayed. It connects the Socket.IO client
-		 * to the Socket.IO server
-		 */
+         * This is called when the page is displayed. It connects the Socket.IO client
+         * to the Socket.IO server
+         */
 		init: function () {
 			IO.socket = io.connect();
 			IO.bindEvents();
 		},
 
 		/**
-		 * While connected, Socket.IO will listen to the following events emitted
-		 * by the Socket.IO server, then run the appropriate function.
-		 */
+         * While connected, Socket.IO will listen to the following events emitted
+         * by the Socket.IO server, then run the appropriate function.
+         */
 		bindEvents: function () {
 			IO.socket.on('connected', IO.onConnected);
 			IO.socket.on('newGameCreated', IO.onNewGameCreated);
@@ -40,8 +40,8 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * The client is successfully connected!
-		 */
+         * The client is successfully connected!
+         */
 		onConnected: function () {
 			// Cache a copy of the client's socket.IO session ID on the App
 			App.mySocketId = IO.socket.socket.sessionid;
@@ -49,17 +49,17 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * A new game has been created and a random game ID has been generated.
-		 * @param data {{ gameId: int, mySocketId: * }}
-		 */
+         * A new game has been created and a random game ID has been generated.
+         * @param data {{ gameId: int, mySocketId: * }}
+         */
 		onNewGameCreated: function (data) {
 			App.Host.gameInit(data);
 		},
 
 		/**
-		 * A player has successfully joined the game.
-		 * @param data {{playerName: string, gameId: int, playerId: int}}
-		 */
+         * A player has successfully joined the game.
+         * @param data {{playerName: string, gameId: int, playerId: int}}
+         */
 		playerJoinedRoom: function (data) {
 			// When a player joins a room, do the updateWaitingScreen funciton.
 			// There are two versions of this function: one for the 'host' and
@@ -71,17 +71,17 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * Both players have joined the game.
-		 * @param data
-		 */
+         * Both players have joined the game.
+         * @param data
+         */
 		beginNewGame: function (data) {
 			App[App.myRole].gameCountdown(data);
 		},
 
 		/**
-		 * A new set of words for the round is returned from the server.
-		 * @param data
-		 */
+         * A new set of words for the round is returned from the server.
+         * @param data
+         */
 		onNewQuestion: function (data) {
 			// Update the current round
 			App.currentRound = data.round;
@@ -91,18 +91,18 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * XXXXXXXXXXXXXXXXXXXX
-		 * @param data
-		 */
+         * XXXXXXXXXXXXXXXXXXXX
+         * @param data
+         */
 		onPloysList: function (data) {
 			// XXXXXXXXXXXXX
 			App[App.myRole].ploysList(data);
 		},
 
 		/**
-		 * A player answered. If this is the host, check the answer.
-		 * @param data
-		 */
+         * A player answered. If this is the host, check the answer.
+         * @param data
+         */
 		hostCheckAnswer: function (data) {
 			if (App.myRole === 'Host') {
 				App.Host.checkAnswer(data);
@@ -110,9 +110,9 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * A player sent ploy. If this is the host, save the answer.
-		 * @param data
-		 */
+         * A player sent ploy. If this is the host, save the answer.
+         * @param data
+         */
 		hostSavePloy: function (data) {
 			if (App.myRole === 'Host') {
 				App.Host.savePloy(data);
@@ -126,17 +126,17 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * Let everyone know the game has ended.
-		 * @param data
-		 */
+         * Let everyone know the game has ended.
+         * @param data
+         */
 		gameOver: function (data) {
 			App[App.myRole].endGame(data);
 		},
 
 		/**
-		 * An error has occurred.
-		 * @param data
-		 */
+         * An error has occurred.
+         * @param data
+         */
 		error: function (data) {
 			alert(data.message);
 		}
@@ -146,37 +146,37 @@ jQuery(function ($) {
 	var App = {
 
 		/**
-		 * Keep track of the gameId, which is identical to the ID
-		 * of the Socket.IO Room used for the players and host to communicate
-		 *
-		 */
+         * Keep track of the gameId, which is identical to the ID
+         * of the Socket.IO Room used for the players and host to communicate
+         *
+         */
 		gameId: 0,
 
 		/**
-		 * This is used to differentiate between 'Host' and 'Player' browsers.
-		 */
-		myRole: '', // 'Player' or 'Host'
+         * This is used to differentiate between 'Host' and 'Player' browsers.
+         */
+		myRole: '',   // 'Player' or 'Host'
 
 		/**
-		 * The Socket.IO socket object identifier. This is unique for
-		 * each player and host. It is generated when the browser initially
-		 * connects to the server when the page loads for the first time.
-		 */
+         * The Socket.IO socket object identifier. This is unique for
+         * each player and host. It is generated when the browser initially
+         * connects to the server when the page loads for the first time.
+         */
 		mySocketId: '',
 
 		/**
-		 * Identifies the current round. Starts at 0 because it corresponds
-		 * to the array of word data stored on the server.
-		 */
+         * Identifies the current round. Starts at 0 because it corresponds
+         * to the array of word data stored on the server.
+         */
 		currentRound: 0,
 
 		/* *************************************
-		 *                Setup                *
-		 * *********************************** */
+         *                Setup                *
+         * *********************************** */
 
 		/**
-		 * This runs when the page initially loads.
-		 */
+         * This runs when the page initially loads.
+         */
 		init: function () {
 			App.cacheElements();
 			App.showInitScreen();
@@ -187,8 +187,8 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * Create references to on-screen elements used throughout the game.
-		 */
+         * Create references to on-screen elements used throughout the game.
+         */
 		cacheElements: function () {
 			App.$doc = $(document);
 
@@ -207,8 +207,8 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * Create some click handlers for the various buttons that appear on-screen.
-		 */
+         * Create some click handlers for the various buttons that appear on-screen.
+         */
 		bindEvents: function () {
 			// Host
 			App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
@@ -223,13 +223,13 @@ jQuery(function ($) {
 		},
 
 		/* *************************************
-		 *             Game Logic              *
-		 * *********************************** */
+         *             Game Logic              *
+         * *********************************** */
 
 		/**
-		 * Show the initial Anagrammatix Title Screen
-		 * (with Start and Join buttons)
-		 */
+         * Show the initial Anagrammatix Title Screen
+         * (with Start and Join buttons)
+         */
 		showInitScreen: function () {
 			App.$gameArea.html(App.$templateIntroScreen);
 			App.doTextFit('.title');
@@ -237,49 +237,49 @@ jQuery(function ($) {
 
 
 		/* *******************************
-		 *         HOST CODE           *
-		 ******************************* */
+           *         HOST CODE           *
+           ******************************* */
 		Host: {
 
 			/**
-			 * Contains references to player data
-			 */
+             * Contains references to player data
+             */
 			players: {},
 
 			/**
-			 * Flag to indicate if a new game is starting.
-			 * This is used after the first game ends, and players initiate a new game
-			 * without refreshing the browser windows.
-			 */
+             * Flag to indicate if a new game is starting.
+             * This is used after the first game ends, and players initiate a new game
+             * without refreshing the browser windows.
+             */
 			isNewGame: false,
 
 			/**
-			 * Keep track of the number of players that have joined the game.
-			 */
+             * Keep track of the number of players that have joined the game.
+             */
 			numPlayersInRoom: 0,
 
 			/**
-			 * Keep track of the number of ploys that have been sent to the game.
-			 */
+             * Keep track of the number of ploys that have been sent to the game.
+             */
 			nbPloys: 0,
 
 			/**
-			 * A reference to the correct answer for the current round.
-			 */
+             * A reference to the correct answer for the current round.
+             */
 			currentCorrectAnswer: '',
 
 			/**
-			 * Handler for the "Start" button on the Title Screen.
-			 */
+             * Handler for the "Start" button on the Title Screen.
+             */
 			onCreateClick: function () {
 				// console.log('Clicked "Create A Game"');
 				IO.socket.emit('hostCreateNewGame');
 			},
 
 			/**
-			 * The Host screen is displayed for the first time.
-			 * @param data{{ gameId: int, mySocketId: * }}
-			 */
+             * The Host screen is displayed for the first time.
+             * @param data{{ gameId: int, mySocketId: * }}
+             */
 			gameInit: function (data) {
 				App.gameId = data.gameId;
 				App.mySocketId = data.mySocketId;
@@ -291,8 +291,8 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Show the Host screen containing the game URL and unique game ID
-			 */
+             * Show the Host screen containing the game URL and unique game ID
+             */
 			displayNewGameScreen: function () {
 				// Fill the game screen with the appropriate HTML
 				App.Host.showTemplateNewGame();
@@ -330,9 +330,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Update the Host screen when the first player joins
-			 * @param data{{playerName: string, gameId: int, playerId: string}}
-			 */
+             * Update the Host screen when the first player joins
+             * @param data{{playerName: string, gameId: int, playerId: string}}
+             */
 			updateWaitingScreen: function (data) {
 				// If this is a restarted game, show the screen.
 				if (App.Host.isNewGame) {
@@ -351,15 +351,12 @@ jQuery(function ($) {
 			},
 
 			launchGame: function (data) {
-				IO.socket.emit('hostRoomFull', {
-					gameId: App.gameId,
-					language: App.language
-				});
+				IO.socket.emit('hostRoomFull', { gameId: App.gameId, language: App.language });
 			},
 
 			/**
-			 * Show the countdown screen
-			 */
+             * Show the countdown screen
+             */
 			gameCountdown: function () {
 
 				// Prepare the game screen with new HTML
@@ -386,9 +383,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Show the word for the current round on screen.
-			 * @param data{{round: *, word: *, answer: *, list: Array}}
-			 */
+             * Show the word for the current round on screen.
+             * @param data{{round: *, word: *, answer: *, list: Array}}
+             */
 			newQuestion: function (data) {
 				// Insert the new word into the DOM
 				$('#hostWord').text(data.question);
@@ -406,9 +403,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Check the answer clicked by a player.
-			 * @param data{{round: *, playerId: *, answer: *, gameId: *}}
-			 */
+             * Check the answer clicked by a player.
+             * @param data{{round: *, playerId: *, answer: *, gameId: *}}
+             */
 			checkAnswer: function (data) {
 				// Verify that the answer clicked is from the current round.
 				// This prevents a 'late entry' from a player whos screen has not
@@ -490,9 +487,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Save the ploy sent by a player.
-			 * @param data{{round: *, playerId: *, ploy: *, gameId: *}}
-			 */
+             * Save the ploy sent by a player.
+             * @param data{{round: *, playerId: *, ploy: *, gameId: *}}
+             */
 			savePloy: function (data) {
 				// Verify that the ploy sent is from the current round.
 				// This prevents a 'late entry' from a player whos screen has not
@@ -543,9 +540,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Show the word for the current round on screen.
-			 * @param data{{round: *, gameId: *, question: *, answer: *, ploys: Array, list: Array}}
-			 */
+             * Show the word for the current round on screen.
+             * @param data{{round: *, gameId: *, question: *, answer: *, ploys: Array, list: Array}}
+             */
 			ploysList: function (data) {
 				console.log(data.list);
 
@@ -584,9 +581,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * All 10 rounds have played out. End the game.
-			 * @param data
-			 */
+             * All 10 rounds have played out. End the game.
+             * @param data
+             */
 			endGame: function (data) {
 				var bestScore = 0;
 				Object.keys(App.Host.players).forEach(function (playerId) {
@@ -622,8 +619,8 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * A player hit the 'Start Again' button after the end of a game.
-			 */
+             * A player hit the 'Start Again' button after the end of a game.
+             */
 			restartGame: function () {
 				App.Host.showTemplateNewGame();
 				$('#spanNewGameCode').text(App.gameId);
@@ -632,24 +629,24 @@ jQuery(function ($) {
 
 
 		/* *****************************
-		 *        PLAYER CODE        *
-		 ***************************** */
+           *        PLAYER CODE        *
+           ***************************** */
 
 		Player: {
 
 			/**
-			 * A reference to the socket ID of the Host
-			 */
+             * A reference to the socket ID of the Host
+             */
 			hostSocketId: '',
 
 			/**
-			 * The player's name entered on the 'Join' screen.
-			 */
+             * The player's name entered on the 'Join' screen.
+             */
 			myName: '',
 
 			/**
-			 * Click handler for the 'JOIN' button
-			 */
+             * Click handler for the 'JOIN' button
+             */
 			onJoinClick: function () {
 				// console.log('Clicked "Join A Game"');
 
@@ -658,9 +655,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * The player entered their name and gameId (hopefully)
-			 * and clicked Start.
-			 */
+             * The player entered their name and gameId (hopefully)
+             * and clicked Start.
+             */
 			onPlayerStartClick: function () {
 				// console.log('Player clicked "Start"');
 
@@ -683,9 +680,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * The player entered his ploy
-			 * and clicked validate.
-			 */
+             * The player entered his ploy
+             * and clicked validate.
+             */
 			onPlayerSendPloyClick: function () {
 				// console.log('Player clicked "Start"');
 
@@ -705,8 +702,8 @@ jQuery(function ($) {
 			},
 
 			/**
-			 *  Click handler for the Player hitting a word in the word list.
-			 */
+             *  Click handler for the Player hitting a word in the word list.
+             */
 			onPlayerAnswerClick: function (event) {
 				console.log('onPlayerAnswerClick', event.data);
 
@@ -723,9 +720,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 *  Click handler for the "Start Again" button that appears
-			 *  when a game is over.
-			 */
+             *  Click handler for the "Start Again" button that appears
+             *  when a game is over.
+             */
 			onPlayerRestart: function () {
 				var data = {
 					gameId: App.gameId,
@@ -742,9 +739,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Display the waiting screen when waiting for other players
-			 * @param data
-			 */
+             * Display the waiting screen when waiting for other players
+             * @param data
+             */
 			updateWaitingScreen: function (data) {
 				if (IO.socket.socket.sessionid === data.playerId) {
 					App.myRole = 'Player';
@@ -760,9 +757,9 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Display 'Get Ready' while the countdown timer ticks down.
-			 * @param hostData
-			 */
+             * Display 'Get Ready' while the countdown timer ticks down.
+             * @param hostData
+             */
 			gameCountdown: function (hostData) {
 				App.Player.hostSocketId = hostData.mySocketId;
 				$('#gameArea')
@@ -770,17 +767,17 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Show the list of words for the current round.
-			 * @param data{{round: *, word: *, answer: *, list: Array}}
-			 */
+             * Show the list of words for the current round.
+             * @param data{{round: *, word: *, answer: *, list: Array}}
+             */
 			newQuestion: function (data) {
 				$('#gameArea').html(App.$ployTemplate);
 			},
 
 			/**
-			 * XXXXXXXXXXXXXXXXXX
-			 * @param data{{round: *, gameId: *, question: *, answer: *, ploys: Array, list: Array}}
-			 */
+             * XXXXXXXXXXXXXXXXXX
+             * @param data{{round: *, gameId: *, question: *, answer: *, ploys: Array, list: Array}}
+             */
 			ploysList: function (data) {
 				$('#gameArea').html(App.$ployTemplate);
 				// Create an unordered list element
@@ -812,17 +809,17 @@ jQuery(function ($) {
 			},
 
 			/**
-			 * Show the "Game Over" screen.
-			 */
+             * Show the "Game Over" screen.
+             */
 			endGame: function () {
 				$('#gameArea')
 					.html('<div class="gameOver">Game Over!</div>')
 					.append(
 						// Create a button to start a new game.
 						$('<button>Start Again</button>')
-						.attr('id', 'btnPlayerRestart')
-						.addClass('btn')
-						.addClass('btnGameOver')
+							.attr('id', 'btnPlayerRestart')
+							.addClass('btn')
+							.addClass('btnGameOver')
 					);
 			}
 		},
@@ -833,12 +830,12 @@ jQuery(function ($) {
            ************************** */
 
 		/**
-		 * Display the countdown timer on the Host screen
-		 *
-		 * @param $el The container element for the countdown timer
-		 * @param startTime
-		 * @param callback The function to call when the timer ends.
-		 */
+         * Display the countdown timer on the Host screen
+         *
+         * @param $el The container element for the countdown timer
+         * @param startTime
+         * @param callback The function to call when the timer ends.
+         */
 		countDown: function ($el, startTime, callback) {
 
 			// Display the starting time on the screen.
@@ -869,11 +866,11 @@ jQuery(function ($) {
 		},
 
 		/**
-		 * Make the text inside the given element as big as possible
-		 * See: https://github.com/STRML/textFit
-		 *
-		 * @param el The parent element of some text
-		 */
+         * Make the text inside the given element as big as possible
+         * See: https://github.com/STRML/textFit
+         *
+         * @param el The parent element of some text
+         */
 		doTextFit: function (el) {
 			textFit($(el)[0], {
 				minFontSize: 10,
