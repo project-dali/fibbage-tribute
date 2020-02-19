@@ -199,6 +199,8 @@ jQuery(function ($) {
 			App.$doc = $(document);
 
 			// Templates
+			App.$banner = $('#banner-template');
+			App.$footer = $('#footer-template');
 			App.$gameArea = $('#gameArea');
 			App.$templateIntroScreen = $('#intro-screen-template').html();
 			App.$templateNewGame = $('#create-game-template').html();

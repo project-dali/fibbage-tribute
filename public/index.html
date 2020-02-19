@@ -16,21 +16,50 @@
 
 <body>
 
-	<div class="banner"></div>
-	<div id="gameArea">
+	<script id="banner-template" type="text/template">
+		<div role="banner" class="banner">
+			<img src="public/imports/banner.png"/>
+			<!-- flowy background -->
+		</div>
+	</script>
+
+	<script id="footer-template" type="text/template">
+		<div role="footer" class="footer">
+			<img src="public/imports/banner.png"/>
+			<!-- footer flowy background -->
+		</div>
+	</script>
+
+	<main id="gameArea">
 		<!-- This is where the templates defined below will be used -->
-	</div>
+	</main>
 
 	<!-- Main Title Screen that appears when the page loads for the first time -->
 	<script id="intro-screen-template" type="text/template">
 
         <div class="titleWrapper">
 
-            <div class="title">
-                Thunk
-            </div>
+			<header class="title">
+				<!-- current page title or system prompt/feedback -->
+				
+				<div class="title game-title no-outline">
+					<!-- in the case of the pink box, this would be class="outline" -->
+					<h1>Thunk</h1>
+					<!-- during a round the h1 would be a prompt, so content might be "TFOML" -->
+					<!-- otherwise it may be "round 3 scores", "player 4 wins", "final scores" -->
+				</div>
+			</header>
 
-            <div class="buttons">
+			<section class="primary">
+				<!-- description of main header, or forms/primary interactions -->
+				<h2 class="how-to-play">How to Play</h2>
+				<div class="landing-instructions">
+					<p>Go to <b>thunk.fun</b> on your player device. <br>
+						Enter room code and join the game</p>
+				</div>
+			</section>
+
+            <div class="buttons enter-game">
                 <button id="btnCreateGame" class="btn left btnHome">CREATE</button>
                 <button id="btnJoinGame" class="btn right btnHome">JOIN</button>
                 <div style="clear:both"></div>
