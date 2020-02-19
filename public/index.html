@@ -50,15 +50,6 @@
 				</div>
 			</header>
 
-			<section class="primary">
-				<!-- description of main header, or forms/primary interactions -->
-				<h2 class="how-to-play">How to Play</h2>
-				<div class="landing-instructions">
-					<p>Go to <b>thunk.fun</b> on your player device. <br>
-						Enter room code and join the game</p>
-				</div>
-			</section>
-
             <div class="buttons enter-game">
                 <button id="btnCreateGame" class="btn left btnHome">CREATE</button>
                 <button id="btnJoinGame" class="btn right btnHome">JOIN</button>
@@ -73,36 +64,103 @@
 	<script id="create-game-template" type="text/template">
         <div class="createGameWrapper">
 
-            <div class="info">Go to <a id="gameURL">Error!</a> on your player device</div>
+			<section class="primary">
+				<div class="info">Go to <a id="gameURL">Error!</a> on your player device</div>
+				<div class="info">Click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
+				<div id="spanNewGameCode" class="gameId">Error!</div>
 
-            <div class="info">Click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
-            <div id="spanNewGameCode" class="gameId">Error!</div>
+				<div id="playersWaiting"></div>
+			</section>
+			
+			<section role="status" class="system-status">
+				<!-- non-interactive system feedback -->
+				<div class="closed-captions">
+					<!-- narration captions -->
+				</div>
+			</section>
 
-            <div id=flags></div>
-
-            <div id="playersWaiting"></div>
         </div>
     </script>
 
 	<!-- This screen appears when a player clicks "JOIN" on the Title Screen -->
 	<script id="join-game-template" type="text/template">
         <div class="joinGameWrapper">
-            <div class="info">
-                <label for="inputPlayerName">Your Name:</label>
-                <input id="inputPlayerName" type="text" />
-            </div>
+			<header class="title">
+				<!-- current page title or system prompt/feedback -->
+				<div class="brand-mark">
+					<!-- for use on landing and room join -->
+				</div>
+				<div class="game-title no-outline">
+					<!-- in the case of the pink box, this would be class="outline" -->
+					<h1>Welcome</h1>
+					<span class="subtitle">Please enter a room code</span>
+					<!-- during a round the h1 would be a prompt, so content might be "TFOML" -->
+					<!-- otherwise it may be "round 3 scores", "player 4 wins", "final scores" -->
+				</div>
+			</header>            
 
             <div class="info">
                 <label for="inputGameId">Game ID:</label>
                 <input id="inputGameId" type="number"/>
-			</div>
-			
+			</div>				
+
+            <div class="info buttons">
+                <button id="btnStart" class="btn">Join Room</button>
+            </div>
+        </div>
+	</script>
+
+	<!-- This screen appears when a player clicks "Join Game" on the Join Screen -->
+	<script id="nickname-select-template" type="text/template">
+        <div class="joinGameWrapper">
+			<header class="title">
+				<!-- current page title or system prompt/feedback -->
+				<div class="brand-mark">
+					<!-- for use on landing and room join -->
+				</div>
+				<div class="game-title no-outline">
+					<!-- in the case of the pink box, this would be class="outline" -->
+					<h1>Write your nickname</h1>
+					<span class="subtitle">Who are you</span>
+					<!-- during a round the h1 would be a prompt, so content might be "TFOML" -->
+					<!-- otherwise it may be "round 3 scores", "player 4 wins", "final scores" -->
+				</div>
+			</header>            
+
+			<div class="info">
+                <label for="inputPlayerName">Your Name:</label>
+                <input id="inputPlayerName" type="text"/>
+            </div>
+				
+            <div class="info buttons">
+                <button id="btnNicknameSelect" class="btn">Select Nickname</button>
+            </div>
+        </div>
+    </script>
+
+	<!-- This screen appears when a player clicks "JOIN" on the Title Screen -->
+	<script id="avatar-select-template" type="text/template">
+        <div class="joinGameWrapper">
+			<header class="title">
+				<!-- current page title or system prompt/feedback -->
+				<div class="brand-mark">
+					<!-- for use on landing and room join -->
+				</div>
+				<div class="game-title no-outline">
+					<!-- in the case of the pink box, this would be class="outline" -->
+					<h1>Choose your character</h1>
+					<span class="subtitle">Please do it</span>
+					<!-- during a round the h1 would be a prompt, so content might be "TFOML" -->
+					<!-- otherwise it may be "round 3 scores", "player 4 wins", "final scores" -->
+				</div>
+			</header>            
+		
 			<!-- This will be generatively filled by avatar list -->
 			<form class="info avatars" id="inputPlayerAvatar">
 			</form>				
 
             <div class="info buttons">
-                <button id="btnStart" class="btn">Start</button>
+                <button id="btnAvatarSelect" class="btn">Select Avatar</button>
                 <button id="btnPlayerLaunchGame" class="btn" style="display: none;">Launch Game</button>
                 <div id="playerWaitingMessage"></div>
             </div>

@@ -205,6 +205,8 @@ jQuery(function ($) {
 			App.$templateIntroScreen = $('#intro-screen-template').html();
 			App.$templateNewGame = $('#create-game-template').html();
 			App.$templateJoinGame = $('#join-game-template').html();
+			App.$templateNicknameSelect = $('#nickname-select-template').html();
+			App.$templateAvatarSelect = $('#avatar-select-template').html();
 			App.$hostGame = $('#host-game-template').html();
 			App.$playerInfo = $('#player-info-template').html();
 			App.$ployTemplate = $('#ploy-template').html();
@@ -224,6 +226,8 @@ jQuery(function ($) {
 			// Player
 			App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
 			App.$doc.on('click', '#btnStart', App.Player.onPlayerStartClick);
+			App.$doc.on('click', '#btnNicknameSelect', App.Player.onPlayerNicknameSelect);
+			App.$doc.on('click', '#btnAvatarSelect', App.Player.onPlayerAvatarSelect);
 			App.$doc.on('click', '#btnSendPloy', App.Player.onPlayerSendPloyClick);
 			// App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
 			App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
@@ -660,13 +664,6 @@ jQuery(function ($) {
 
 				// Display the Join Game HTML on the player's screen.
 				App.$gameArea.html(App.$templateJoinGame);
-
-				// generate avatar buttons from Avatar List
-				for (let avatar of App.avatarList) {
-					$('#inputPlayerAvatar').append(function () {
-						return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
-					});
-				}
 			},
 
 			selectAvatarId: function () {
@@ -682,17 +679,42 @@ jQuery(function ($) {
 
 				// collect data to send to the server
 				var data = {
-					gameId: +($('#inputGameId').val()),
-					playerName: $('#inputPlayerName').val() || 'anon',
-					playerAvatar: $('input[name=avatar]:checked', '#inputPlayerAvatar').val()
+					gameId: +($('#inputGameId').val())
 				};
+
+				App.myRole = 'Player';
 
 				// Send the gameId and playerName to the server
 				IO.socket.emit('playerJoinGame', data);
+			},
+
+			onPlayerNicknameSelect: function () {
+				let playerName = $('#inputPlayerName').val() || 'anon';
 
 				// Set the appropriate properties for the current player.
-				App.myRole = 'Player';
-				App.Player.myName = data.playerName;
+				// App.myRole = 'Player';
+				App.Player.myName = playerName;
+
+				$('#gameArea').html(App.$templateAvatarSelect);
+
+				// generate avatar buttons from Avatar List
+				for (let avatar of App.avatarList) {
+					$('#inputPlayerAvatar').append(function () {
+						return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
+					});
+				}
+			},
+
+			onPlayerAvatarSelect: function () {
+				let playerAvatar = $('input[name=avatar]:checked', '#inputPlayerAvatar').val();
+				App.Player.myAvatar.id = playerAvatar;
+
+				$('#btnPlayerLaunchGame').css('display', 'inline-block');
+				$('#btnAvatarSelect').css('display', 'none');
+
+				$('#playerWaitingMessage')
+					.append('<p/>')
+					.text('Joined Game ' + App.gameId + '. Please wait for game to begin.');
 			},
 
 			onPlayerLaunchGameClick: function () {
@@ -759,21 +781,33 @@ jQuery(function ($) {
 			},
 
 			/**
+			 * Room has been joined, Display nickname selection view
+			 * @param data gameId and other stuff
+			 */
+			displayNicknameSelect: function (data) {
+				if (IO.socket.socket.sessionid === data.playerId) {
+					App.gameId = data.gameId;
+				}
+
+				$('#gameArea').html(App.$templateNicknameSelect);
+			},
+
+			/**
+			 * Room has been joined, Display nickname selection view
+			 * @param data gameId and other stuff
+			 */
+			displayAvatarSelect: function () {
+				$('#gameArea').html(App.$templateAvatarSelect);
+
+
+			},
+
+			/**
              * Display the waiting screen when waiting for other players
              * @param data
              */
 			updateWaitingScreen: function (data) {
-				if (IO.socket.socket.sessionid === data.playerId) {
-					App.myRole = 'Player';
-					App.gameId = data.gameId;
-
-					$('#btnPlayerLaunchGame').css('display', 'inline-block');
-					$('#btnStart').css('display', 'none');
-
-					$('#playerWaitingMessage')
-						.append('<p/>')
-						.text('Joined Game ' + data.gameId + '. Please wait for game to begin.');
-				}
+				App.Player.displayNicknameSelect(data);
 			},
 
 			/**

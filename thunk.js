@@ -190,7 +190,7 @@ function allPloysSent(data) {
  */
 function playerJoinGame(data) {
 	//console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
-	console.log('player joining game with avatar: ' + data.playerAvatar);
+	// console.log('player joining game with avatar: ' + data.playerAvatar);
 	// A reference to the player's Socket.IO socket object
 	var sock = this;
 
