@@ -42,7 +42,8 @@ jQuery(function ($) {
 		/**
          * The client is successfully connected!
          */
-		onConnected: function () {
+		onConnected: function (data) {
+			App.avatarList = data.avatarList;
 			// Cache a copy of the client's socket.IO session ID on the App
 			App.mySocketId = IO.socket.socket.sessionid;
 			// console.log(data.message);
@@ -170,6 +171,11 @@ jQuery(function ($) {
          */
 		currentRound: 0,
 
+		/**
+		 * Contains a list of all system avatars, their ID's 
+		 */
+		avatarList: [],
+
 		/* *************************************
          *                Setup                *
          * *********************************** */
@@ -278,7 +284,7 @@ jQuery(function ($) {
 
 			/**
              * The Host screen is displayed for the first time.
-             * @param data{{ gameId: int, mySocketId: * }}
+             * @param data{{ gameId: int, mySocketId: *, avatarList: [] }}
              */
 			gameInit: function (data) {
 				App.gameId = data.gameId;
@@ -630,6 +636,21 @@ jQuery(function ($) {
 			myName: '',
 
 			/**
+			 * 
+			 * id: 0 = unassigned
+			 * id: 1-7 = auto incremented id in thunk.avatar table
+			 * name: avatar's name in thunk.avatar table
+			 * animationName: which animation should be running
+			 * animationIsPlaying: 0 = no, 1 = yes
+			 */
+			myAvatar: {
+				id: 0,
+				name: '',
+				animationName: '',
+				animationIsPlaying: 0
+			},
+
+			/**
              * Click handler for the 'JOIN' button
              */
 			onJoinClick: function () {
@@ -637,6 +658,17 @@ jQuery(function ($) {
 
 				// Display the Join Game HTML on the player's screen.
 				App.$gameArea.html(App.$templateJoinGame);
+
+				// generate avatar buttons from Avatar List
+				for (let avatar of App.avatarList) {
+					$('#inputPlayerAvatar').append(function () {
+						return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
+					});
+				}
+			},
+
+			selectAvatarId: function () {
+				console.log($('avatarGrid'));
 			},
 
 			/**
@@ -649,7 +681,8 @@ jQuery(function ($) {
 				// collect data to send to the server
 				var data = {
 					gameId: +($('#inputGameId').val()),
-					playerName: $('#inputPlayerName').val() || 'anon'
+					playerName: $('#inputPlayerName').val() || 'anon',
+					playerAvatar: $('input[name=avatar]:checked', '#inputPlayerAvatar').val()
 				};
 
 				// Send the gameId and playerName to the server
@@ -784,8 +817,6 @@ jQuery(function ($) {
 					$li.append($button);
 					$list.append($li);
 
-					const data = {};
-
 					$button.on('click', this, App.Player.onPlayerAnswerClick);
 				});
 
@@ -863,7 +894,6 @@ jQuery(function ($) {
 				alignVert: true,
 				multiLine: true
 			});
-			console.log(el);
 		}
 	};
 

@@ -24,7 +24,9 @@ let questions = [];
 exports.initGame = function (sio, socket) {
 	io = sio;
 	gameSocket = socket;
-	gameSocket.emit('connected', { message: 'You are connected!' });
+	getSystemAvatars().then((results) => {
+		gameSocket.emit('connected', { message: 'You are connected!', avatarList: results });
+	});
 
 	// Host Events
 	gameSocket.on('hostCreateNewGame', hostCreateNewGame);
@@ -53,9 +55,11 @@ exports.initGame = function (sio, socket) {
 function hostCreateNewGame() {
 	/**
 	 * generates random 6 digit room code
-	 * @returns string roomID
+	 * CAUTION. theoretically it is possible to generate the
+	 * same room code as another host
+	 * @returns string roomId
      */
-	let createRoomID = () => {
+	let createRoomId = () => {
 		let roomID = '';
 		for (let i = 0; i < 6; i++) {
 			roomID += String(Math.floor(Math.random() * 10));
@@ -64,34 +68,8 @@ function hostCreateNewGame() {
 		return roomID;
 	};
 
-	// /**
-	//  * Creates a room with supplied room code,
-	//  * recursively creates new code if one already exists in db
-	//  * @param {number} __roomID 6 digit room code
-	//  * @param {function} callback called regardless of success
-	//  */
-	// let createRoom = (__roomID, callback) => {
-	// 	let query = 'INSERT INTO thunk.room (id)';
-	// 	query += `VALUES (${__roomID});`;
-	// 	db.sendQuery(query, connection, (err, results, fields) => {
-	// 		if (err) { // if duplicate entry, make a new code and try again
-	// 			if (err.errno === 1062) {
-	// 				__roomID = createRoomID();
-	// 				createRoom(__roomID);
-	// 			} // if another SQL error, stop everything
-	// 			throw err;
-	// 		}
-	// 		callback(__roomID);
-	// 	});
-	// };
-
-	// let roomID = createRoomID();
-	// createRoom(roomID, (roomID) => {
-	// 	console.log(roomID);
-	// });
-
 	// Create a unique Socket.IO Room
-	let thisGameId = createRoomID();
+	let thisGameId = createRoomId();
 
 	// Return the Room ID (gameId) and the socket ID (mySocketId) to the browser client
 	this.emit('newGameCreated', { gameId: thisGameId, mySocketId: this.id });
@@ -135,8 +113,6 @@ function hostPrepareGame(data) {
 	};
 
 	getPrompt(10).then((results) => {
-		console.log(results);
-
 		questions = [];
 
 		for (let textRow of results) {
@@ -145,8 +121,6 @@ function hostPrepareGame(data) {
 				solution: textRow.author
 			});
 		}
-
-		console.log(questions);
 
 		io.sockets.in(data.gameId).emit('beginNewGame', data);
 	});
@@ -216,7 +190,7 @@ function allPloysSent(data) {
  */
 function playerJoinGame(data) {
 	//console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
-
+	console.log('player joining game with avatar: ' + data.playerAvatar);
 	// A reference to the player's Socket.IO socket object
 	var sock = this;
 
@@ -287,6 +261,23 @@ function playerRestart(data) {
    *      GAME LOGIC       *
    *                       *
    ************************* */
+
+function getSystemAvatars() {
+	return new Promise((resolve) => {
+		let query = 'SELECT * FROM thunk.avatar';
+
+		db.sendQuery(query, connection, (err, results, fields) => {
+			if (err) {
+				throw err;
+			}
+			if (results.length > 0) { // good
+				resolve(results);
+			} else {
+				resolve(false); // this should be a reject probably
+			}
+		});
+	});
+}
 
 /**
  * Get a word for the host, and a list of words for the player.

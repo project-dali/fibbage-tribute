@@ -199,13 +199,17 @@ html, body {
 .joinGameWrapper .info {
     font-size: 1.5em;
     color: #ECFFE0;
-    height: 30%;
     padding-top: 1%;
 }
 
 .joinGameWrapper .btn {
     width: 100%;
     height: 50%;
+}
+
+.joinGameWrapper .info.avatars {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 }
 
 #playerWaitingMessage {
