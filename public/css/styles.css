@@ -270,7 +270,7 @@ li:not(:last-child) .btnAnswer {
    ****************************** */
 
 /* Absolute Centering: http://coding.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-centering-css/ */
-#wordArea {
+#promptArea {
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
     flex-grow: 1;
@@ -281,13 +281,13 @@ li:not(:last-child) .btnAnswer {
     margin: auto;
 }
 
-#hostWord {
+.hostPrompt {
     flex-grow: 1;
     width: 100%;
     text-align: center;
 }
 
-#hostWord h2, #btnPlayerRestart h3 {
+.hostPrompt h2, #btnPlayerRestart h3 {
     font-size: 161px;
     line-height: 1em;
     font-family: 'Quicksand', sans-serif;
@@ -295,6 +295,16 @@ li:not(:last-child) .btnAnswer {
     margin: 0;
     padding: 0;
     text-transform: uppercase;
+}
+
+#promptBut {
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+#hostSwitchUp {
+    display: none;
 }
 
 #playerInfos {

@@ -14,6 +14,9 @@ let connection = db.createCon(secret.dbCredentials);
 
 // store the questions for game in here
 let questions = [];
+let switchups = [];
+
+const numRounds = 3;
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -114,7 +117,7 @@ function hostPrepareGame(data) {
 	};
 
 	// change to 6 when adding to production
-	getPrompt(3).then((results) => {
+	getPrompt(numRounds).then((results) => {
 		questions = [];
 
 		for (let textRow of results) {
@@ -123,6 +126,42 @@ function hostPrepareGame(data) {
 				solution: textRow.author
 			});
 		}
+
+		io.sockets.in(data.gameId).emit('beginNewGame', data);
+	});
+
+	let getSwitchUp = (amount) => {
+		return new Promise((resolve) => {
+			let query = `SELECT * FROM thunk.switch_up 
+			WHERE round_type='think_twice'
+			ORDER BY RAND()
+			LIMIT ${amount};`;
+
+			db.sendQuery(query, connection, (err, results, fields) => {
+				if (err) { // if duplicate entry, make a new code and try again
+					throw err;
+				}
+				if (results.length > 0) { // a room with this ID exists
+					resolve(results);
+				} else {
+					resolve(false); // this should be a reject probably
+				}
+			});
+		});
+	};
+
+	getSwitchUp(numRounds-1).then((results) => {
+		console.log(results);
+
+		switchups = [];
+
+		for (let textRow of results) {
+			switchups.push({
+				switchup: textRow.switch_up
+			});
+		}
+
+		console.log(switchups);
 
 		io.sockets.in(data.gameId).emit('beginNewGame', data);
 	});
@@ -285,6 +324,9 @@ function sendQuestion(wordPoolIndex, gameId) {
 	var json = questions[wordPoolIndex];
 	json.answer = json.solution;
 	json.round = wordPoolIndex;
+	if(wordPoolIndex > 0) {
+		json.switchup = switchups[wordPoolIndex-1].switchup;
+	}
 	io.sockets.in(gameId).emit('newQuestion', json);
 }
 

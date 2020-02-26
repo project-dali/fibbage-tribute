@@ -398,14 +398,23 @@ jQuery(function ($) {
              * @param data{{round: *, word: *, answer: *, list: Array}}
              */
 			newQuestion: function (data) {
+				if(data.round == 1) {
+					$('#promptBut').css('display', 'block');
+					$('#hostSwitchUp').css('display', 'block');
+				}
 				// Insert the new word into the DOM
 				$('#hostWord').text(data.question);
 				App.doTextFit('#hostWord');
-
+				if(typeof data.switchup !== 'undefined') {
+					$('#hostSwitchUp').text(data.switchup);
+					App.doTextFit('#hostSwitchUp');	
+				}
+				
 				$('#playersAnswersArea').empty();
 
 				// Update the data for the current round
 				App.Host.currentQuestion = data.question;
+				App.Host.currentSwitchUp = data.switchup;
 				App.Host.currentCorrectAnswer = data.answer;
 				App.Host.currentRound = data.round;
 				App.Host.nbPloys = 0;
@@ -531,6 +540,7 @@ jQuery(function ($) {
 							round: data.round,
 							gameId: data.gameId,
 							question: App.Host.currentQuestion,
+							switchup: App.Host.currentSwitchUp,
 							answer: App.Host.currentCorrectAnswer,
 							ploys: []
 						};
@@ -620,6 +630,9 @@ jQuery(function ($) {
 					$('#hostWord').text(winners[0] + ' Wins !');
 				}
 				App.doTextFit('#hostWord');
+
+				$('#promptBut').css('display', 'none');
+				$('#hostSwitchUp').css('display', 'none');
 
 				$('#playersAnswersArea').empty();
 
