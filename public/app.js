@@ -29,6 +29,7 @@ jQuery(function ($) {
 			IO.socket.on('connected', IO.onConnected);
 			IO.socket.on('newGameCreated', IO.onNewGameCreated);
 			IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
+			IO.socket.on('playerJoinRoomWithNameAvatar', IO.playerJoinRoomWithNameAvatar);
 			IO.socket.on('beginNewGame', IO.beginNewGame);
 			IO.socket.on('newQuestion', IO.onNewQuestion);
 			IO.socket.on('ploysList', IO.onPloysList);
@@ -69,6 +70,12 @@ jQuery(function ($) {
 			// So on the 'host' browser window, the App.Host.updateWiatingScreen function is called.
 			// And on the player's browser, App.Player.updateWaitingScreen is called.
 			App[App.myRole].updateWaitingScreen(data);
+		},
+
+		playerJoinRoomWithNameAvatar: function (data) {
+			if (App.myRole === 'Host') {
+				App.Host.updatePlayerInfo(data);
+			}
 		},
 
 		/**
@@ -335,16 +342,22 @@ jQuery(function ($) {
 				if (App.Host.isNewGame) {
 					App.Host.displayNewGameScreen();
 				}
-				// Update host screen
-				$('#playersWaiting')
-					.append('<p/>')
-					.text('Player ' + data.playerName + ' joined the game.');
 
 				// Store the new player's data on the Host.
 				App.Host.players[data.playerId] = data;
 
 				// Increment the number of players in the room
 				App.Host.numPlayersInRoom += 1;
+			},
+
+			updatePlayerInfo: function (data) {
+				App.Host.players[data.playerId].playerName = data.playerName;
+				App.Host.players[data.playerId].avatarId = data.avatarId;
+
+				// Update host screen
+				$('#playersWaiting')
+					.append('<p/>')
+					.text('Player ' + data.playerName + ' joined the game.');
 			},
 
 			launchGame: function (data) {
@@ -368,6 +381,7 @@ jQuery(function ($) {
 
 				Object.keys(App.Host.players).forEach(function (key) {
 					const player = App.Host.players[key];
+					console.log(player);
 
 					const $playerInfo = $(App.$playerInfo).appendTo('#playerInfos');
 
@@ -692,7 +706,6 @@ jQuery(function ($) {
 				let playerName = $('#inputPlayerName').val() || 'anon';
 
 				// Set the appropriate properties for the current player.
-				// App.myRole = 'Player';
 				App.Player.myName = playerName;
 
 				$('#gameArea').html(App.$templateAvatarSelect);
@@ -715,6 +728,8 @@ jQuery(function ($) {
 				$('#playerWaitingMessage')
 					.append('<p/>')
 					.text('Joined Game ' + App.gameId + '. Please wait for game to begin.');
+
+				IO.socket.emit('playerSelectNameAvatar', { playerId: App.mySocketId, playerName: App.Player.myName, avatarId: App.Player.myAvatar.id });
 			},
 
 			onPlayerLaunchGameClick: function () {

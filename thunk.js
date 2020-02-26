@@ -37,6 +37,7 @@ exports.initGame = function (sio, socket) {
 
 	// Player Events
 	gameSocket.on('playerJoinGame', playerJoinGame);
+	gameSocket.on('playerSelectNameAvatar', playerSelectNameAvatar);
 	gameSocket.on('playerLaunchGameClick', playerLaunchGameClick);
 	gameSocket.on('playerAnswer', playerAnswer);
 	gameSocket.on('playerSendPloy', playerSendPloy);
@@ -112,7 +113,8 @@ function hostPrepareGame(data) {
 		});
 	};
 
-	getPrompt(10).then((results) => {
+	// change to 6 when adding to production
+	getPrompt(3).then((results) => {
 		questions = [];
 
 		for (let textRow of results) {
@@ -124,21 +126,6 @@ function hostPrepareGame(data) {
 
 		io.sockets.in(data.gameId).emit('beginNewGame', data);
 	});
-
-	// // const domain = NODE_ENV == 'prod' ? 'https://fibbage-tribute-questions.herokuapp.com' : 'http://localhost:3000';
-	// const domain = 'https://fibbage-tribute-questions.herokuapp.com';
-	// const url = domain + '/question/random/' + Config.nbRounds + '?lan=' + data.language;
-	// console.log(url);
-	// request.get(url, (error, response, body) => {
-	// 	if (error) {
-	// 		return console.dir(error);
-	// 	}
-	// 	questions = JSON.parse(body);
-	// 	console.log('Questions :', questions);
-
-	// 	//console.log("All Players Present. Preparing game...");
-	// 	io.sockets.in(data.gameId).emit('beginNewGame', data);
-	// });
 }
 
 /*
@@ -146,7 +133,6 @@ function hostPrepareGame(data) {
  * @param gameId The game ID / room ID
  */
 function hostStartGame(gameId) {
-	console.log('Game Started.');
 	sendQuestion(0, gameId);
 }
 
@@ -214,6 +200,15 @@ function playerJoinGame(data) {
 		// Otherwise, send an error message back to the player.
 		this.emit('error', { message: 'This room does not exist.' });
 	}
+}
+
+/**
+ * 
+ * @param {object} data data.playerName, data.playerAvatar
+ */
+function playerSelectNameAvatar(data) {
+	io.sockets.in(data.gameId).emit('playerJoinRoomWithNameAvatar', data);
+
 }
 
 function playerLaunchGameClick(gameId) {
