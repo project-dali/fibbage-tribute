@@ -1,0 +1,113 @@
+.promptcommand{
+    position: relative;
+    font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 131.26%;
+/* or 24px */
+margin-top: 146px;
+text-align: center;
+
+color: #E6E6E6;
+
+}
+
+.promptmobile{
+    position: relative;
+    font-family: Avenir Next;
+font-style: normal;
+font-weight: bold;
+font-size: 24px;
+line-height: 100%;
+/* or 24px */
+margin-top: 76px;
+text-align: center;
+
+color: #FFFFFF;
+}
+
+.switchmobile{
+    position: relative;
+    font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 105%;
+/* or 19px */
+margin-left: auto;
+margin-right: auto;
+margin-top: 24px;
+text-align: center;
+width: 231px;
+color: #F8BDD7;
+
+}
+
+
+input.mobileinput{
+        position: relative;
+    border-style:solid; 
+    font-size:18px; 
+    padding:12px; 
+    border-width:2px;
+    border-radius:46px; 
+    background-color:#ffffff00; 
+    border-color:#ffffff; 
+    color:#ffffff; 
+    width: 80vw;
+    top: 20vw;
+height: 20px;
+
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 199.26%;
+/* or 36px */
+
+
+color: #F2F2F2;
+
+}
+
+.centerme{
+    margin:auto;
+padding-left: 4vw;
+}
+
+::placeholder{
+    font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 199.26%;
+/* or 36px */
+
+
+color: #F2F2F2;
+
+}
+
+.sendmobile{
+    width: 324px;
+    height: 50px;
+    border: 2px solid #A65875;
+box-sizing: border-box;
+border-radius: 12px;
+width: 86vw;
+margin: auto;
+}
+
+.responsetext{
+    font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 199.26%;
+/* or 36px */
+text-align: center;
+margin-top: 5px;
+color: #F2F2F2;
+
+}

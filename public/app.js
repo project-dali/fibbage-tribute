@@ -221,6 +221,7 @@ jQuery(function ($) {
 			App.$playerAnswerTemplate = $('#player-answer-template').html();
 			App.$playerVoteTemplate = $('#player-vote-template').html();
 			App.$restartScreenTemplate = $('#restart-screen-template').html();
+			App.$creditsTemplate = $('#credits-screen-template').html();
 		},
 
 		/**
@@ -634,6 +635,10 @@ jQuery(function ($) {
 				$('#promptBut').css('display', 'none');
 				$('#hostSwitchUp').css('display', 'none');
 
+				setTimeout(function(){
+					$('#gameArea').html(App.$creditsTemplate);
+				}, 10000);
+
 				$('#playersAnswersArea').empty();
 
 				// Reset game data
@@ -729,6 +734,8 @@ jQuery(function ($) {
 						return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
 					});
 				}
+
+				$('#inputPlayerAvatar').css('display', 'grid');
 			},
 
 			onPlayerAvatarSelect: function () {
@@ -737,6 +744,7 @@ jQuery(function ($) {
 
 				$('#btnPlayerLaunchGame').css('display', 'inline-block');
 				$('#btnAvatarSelect').css('display', 'none');
+				$('#inputPlayerAvatar').css('display', 'none');
 
 				$('#playerWaitingMessage')
 					.append('<p/>')
@@ -805,7 +813,8 @@ jQuery(function ($) {
 				App.currentRound = 0;
 
 				// $('#gameArea').html("<h3>Waiting on host to start new game.</h3>");
-				$('#gameArea').html(App.$restartScreenTemplate);
+				// $('#gameArea').html(App.$restartScreenTemplate);
+				$('#gameArea').html(App.$templateAvatarSelect);
 			},
 
 			/**

@@ -1,0 +1,133 @@
+/* Layout for Master Prompt Instructions */
+
+.instructionheader{
+    font-family: Avenir Next;
+font-style: normal;
+font-weight: bold;
+font-size: 48px;
+line-height: 124.99%;
+text-align: center;
+/* identical to box height, or 60px */
+position: relative;
+margin-left: auto;
+margin-right: auto;
+top: 188px;
+
+color: #ED1B69;
+
+}
+
+.instructiontext{
+    margin-left: auto;
+margin-right: auto;
+text-align: center;
+    top: 200px;
+    position: relative;
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 36px;
+line-height: 131.26%;
+/* or 47px */
+
+
+color: #E6E6E6;
+
+}
+
+
+.promptstyle1{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+margin-left: auto;
+margin-right: auto;
+margin-top: 300px;
+
+background: #ED1D69;
+border-radius: 25px 88px 93px 120px;
+height: 272.25px;
+width: 755.51px;
+z-index: 20;
+}
+
+p.prompttext1{
+    font-family: Avenir Next, 'Lato', sans-serif;
+    font-style: normal;
+font-weight: bold;
+font-size: 64px;
+line-height: 124.99%;
+/* or 80px */
+padding-top:100px;
+
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.butbox{
+    position: relative;
+    width: 137px;
+    height: 52px;
+    margin-left: auto;
+margin-right: auto;
+margin-top: -825px;
+background: #82287E;
+border-radius: 11px;
+z-index: 20;
+}
+
+p.buttext{
+    font-family: Avenir Next;
+font-style: normal;
+font-weight: bold;
+font-size: 24px;
+line-height: 124.99%;
+/* or 30px */
+padding-top:12px;
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.promptstyle2{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+margin-left: auto;
+margin-right: auto;
+margin-top: 25px;
+transform: scaleX(-1);
+background: #ED1D69;
+border-radius: 25px 50px 75px 86px;
+height: 183.77px;
+width: 477.58px;
+z-index: 20;
+}
+
+p.prompttext2{
+    font-family: Avenir Next, 'Lato', sans-serif;
+    font-style: normal;
+font-weight: bold;
+font-size: 36px;
+line-height: 124.99%;
+/* or 80px */
+padding-top:35px;
+transform: scaleX(-1);
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.barstyle{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 0, 61% 100%, 44% 100%);
+clip-path: polygon(0 0, 100% 0, 61% 100%, 44% 100%);
+background: rgba(196, 196, 196, 0.6);
+width: 46px;
+height: 898px;
+margin-left: auto;
+margin-right: auto;
+margin-top: -50px;
+z-index: 10;
+}

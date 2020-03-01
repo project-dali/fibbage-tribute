@@ -1,0 +1,9 @@
+.banner{
+    position: absolute;
+    width: 100%;
+    top: -5%;
+}
+
+.banner img {
+    width: 100%;
+}

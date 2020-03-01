@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
+
+.welcome { 
+position: absolute;
+top: 200px;
+left: 75px;
+font-family: Avenir Next;
+font-style: normal;
+font-weight: bold;
+font-size: 36px;
+line-height: 49px;
+text-align: center;
+
+color: #FFFFFF;
+}
+ 
+.subtitle { 
+position: absolute;
+left: 10px;
+right: 8.27%;
+width: 100%;
+top: 245px;
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 26px;
+text-align: center;
+
+color: #FFFFFF;
+
+}
+
+#room-code { 
+    position: absolute;
+left: 16%;
+right: 16.27%;
+top: 53.52%;
+bottom: 38.83%;
+width: 255px;
+height: 50px;
+border: 3px solid #FFFFFF;
+box-sizing: border-box;
+border-radius: 49px;
+background-color: transparent;
+}

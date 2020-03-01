@@ -16,7 +16,7 @@ let connection = db.createCon(secret.dbCredentials);
 let questions = [];
 let switchups = [];
 
-const numRounds = 3;
+const numRounds = 1;
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -287,7 +287,7 @@ function playerRestart(data) {
 
 	// Emit the player's data back to the clients in the game room.
 	data.playerId = this.id;
-	io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+	io.sockets.in(data.gameId).emit('playerJoinRoomWithNameAvatar', data);
 }
 
 /* *************************
