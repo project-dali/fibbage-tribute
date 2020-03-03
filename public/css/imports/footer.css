@@ -1,6 +1,6 @@
 .footer{
     position: absolute;
-    bottom: -45px;
+    bottom: 0px;
     width: 100%;
 
 transform: rotate(180deg);

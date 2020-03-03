@@ -10,26 +10,16 @@
 	<!-- Let's borrow a cool looking Font from Google -->
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
 
-	<link href="css/styles.css" rel="stylesheet">
-	<link href="css/thunk.css" rel="stylesheet">
+	<link href="css/background.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
 	<!-- <link href="css/main.css" rel="stylesheet"> -->
 </head>
 
 <body>
-
-	<script id="banner-template" type="text/template">
-		<div role="banner" class="banner">
-			<img src="public/imports/banner.png"/>
-			<!-- flowy background -->
-		</div>
-	</script>
-
-	<script id="footer-template" type="text/template">
-		<div role="footer" class="footer">
-			<img src="public/imports/banner.png"/>
-			<!-- footer flowy background -->
-		</div>
-	</script>
+	<div role="banner" class="banner">
+		<img src="css/imports/banner-01.png"/>
+		<!-- flowy background -->
+	</div>
 
 	<main id="gameArea">
 		<!-- This is where the templates defined below will be used -->
@@ -55,10 +45,13 @@
                 <button id="btnCreateGame" class="btn left btnHome">CREATE</button>
                 <button id="btnJoinGame" class="btn right btnHome">JOIN</button>
                 <div style="clear:both"></div>
-            </div>
-
-        </div>
-
+			</div>
+		</div>
+		
+		<div role="footer" class="footer">
+			<img src="css/imports/banner-01.png"/>
+			<!-- footer flowy background -->
+		</div>
     </script>
 
 	<!-- This screen appears when a user clicks "CREATE" on the Title Screen -->
@@ -66,10 +59,11 @@
         <div class="createGameWrapper">
 
 			<section class="primary">
-				<div class="info">Go to <a id="gameURL">Error!</a> on your player device</div>
-				<div class="info">Click <strong>JOIN</strong> and <br/> enter the following Game ID:</div>
+				<ul>
+					<li><div class="info">Go to <a id="gameURL">Error!</a> on your player device</div></li>
+					<li><div class="info">Click <strong>JOIN</strong> and <br/> enter the following Game ID:</div></li>			
+				</ul>
 				<div id="spanNewGameCode" class="gameId">Error!</div>
-
 				<div id="playersWaiting"></div>
 			</section>
 			

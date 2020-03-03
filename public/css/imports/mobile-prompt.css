@@ -3,10 +3,9 @@
     font-family: McLaren;
 font-style: normal;
 font-weight: normal;
-font-size: 18px;
-line-height: 131.26%;
-/* or 24px */
-margin-top: 146px;
+font-size: 1.125em;
+line-height: 1.5em;
+margin-top: 9.125em;
 text-align: center;
 
 color: #E6E6E6;
@@ -15,13 +14,12 @@ color: #E6E6E6;
 
 .promptmobile{
     position: relative;
-    font-family: Avenir Next;
+    font-family: Avenir LT Std, 'Lato', sans-serif;
 font-style: normal;
 font-weight: bold;
-font-size: 24px;
+font-size: 1.5em;
 line-height: 100%;
-/* or 24px */
-margin-top: 76px;
+margin-top: 4.75em;
 text-align: center;
 
 color: #FFFFFF;
@@ -32,14 +30,13 @@ color: #FFFFFF;
     font-family: McLaren;
 font-style: normal;
 font-weight: normal;
-font-size: 18px;
+font-size: 1.125em;
 line-height: 105%;
-/* or 19px */
 margin-left: auto;
 margin-right: auto;
-margin-top: 24px;
+margin-top: 1.5em;
 text-align: center;
-width: 231px;
+width: 14.44em;
 color: #F8BDD7;
 
 }
@@ -48,23 +45,22 @@ color: #F8BDD7;
 input.mobileinput{
         position: relative;
     border-style:solid; 
-    font-size:18px; 
-    padding:12px; 
-    border-width:2px;
-    border-radius:46px; 
+    font-size: 1.125em; 
+    padding: .75em; 
+    border-width: .125em;
+    border-radius: 2.875em; 
     background-color:#ffffff00; 
     border-color:#ffffff; 
     color:#ffffff; 
     width: 80vw;
     top: 20vw;
-height: 20px;
+height: 1.25em;
 
 font-family: McLaren;
 font-style: normal;
 font-weight: normal;
-font-size: 18px;
-line-height: 199.26%;
-/* or 36px */
+font-size: 1.125em;
+line-height: 2.25em;
 
 
 color: #F2F2F2;
@@ -80,9 +76,8 @@ padding-left: 4vw;
     font-family: McLaren;
 font-style: normal;
 font-weight: normal;
-font-size: 18px;
-line-height: 199.26%;
-/* or 36px */
+font-size: 1.125em;
+line-height: 2.25em;
 
 
 color: #F2F2F2;
@@ -90,11 +85,11 @@ color: #F2F2F2;
 }
 
 .sendmobile{
-    width: 324px;
-    height: 50px;
-    border: 2px solid #A65875;
+    width: 20.25em;
+    height: 3.125em;
+    border: .125em solid #A65875;
 box-sizing: border-box;
-border-radius: 12px;
+border-radius: .75em;
 width: 86vw;
 margin: auto;
 }
@@ -103,11 +98,10 @@ margin: auto;
     font-family: McLaren;
 font-style: normal;
 font-weight: normal;
-font-size: 18px;
-line-height: 199.26%;
-/* or 36px */
+font-size: 1.125em;
+line-height: 2.25em;
 text-align: center;
-margin-top: 5px;
+margin-top: .313em;
 color: #F2F2F2;
 
 }
