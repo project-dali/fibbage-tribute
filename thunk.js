@@ -67,6 +67,12 @@ function hostCreateNewGame() {
 		for (let i = 0; i < 6; i++) {
 			roomID += String(Math.floor(Math.random() * 10));
 		}
+		while (roomID < 100000) {
+			roomID = 0;
+			for (let i = 0; i < 6; i++) {
+				roomID += String(Math.floor(Math.random() * 10));
+			}
+		}
 		roomID = parseInt(roomID);
 		return roomID;
 	};
