@@ -44,6 +44,7 @@ exports.initGame = function (sio, socket) {
 	gameSocket.on('playerAnswer', playerAnswer);
 	gameSocket.on('playerSendPloy', playerSendPloy);
 	gameSocket.on('playerRestart', playerRestart);
+	gameSocket.on('throwError', throwError);
 };
 
 /* *******************************
@@ -244,6 +245,10 @@ function playerJoinGame(data) {
 		// Otherwise, send an error message back to the player.
 		this.emit('error', { message: 'This room does not exist.' });
 	}
+}
+
+function throwError(errorMessage) {
+	this.emit('error', { message: errorMessage });
 }
 
 /**

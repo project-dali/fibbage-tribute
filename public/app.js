@@ -806,36 +806,45 @@ jQuery(function ($) {
 			},
 
 			onPlayerNicknameSelect: function () {
-				let playerName = $('#inputPlayerName').val() || 'anon';
+				if ($('#inputPlayerName').val()) {
+					let playerName = $('#inputPlayerName').val() || 'anon';
 
-				// Set the appropriate properties for the current player.
-				App.Player.myName = playerName;
+					App.Player.myName = playerName;
 
-				$('#gameArea').html(App.$templateAvatarSelect);
+					$('#gameArea').html(App.$templateAvatarSelect);
 
-				// generate avatar buttons from Avatar List
-				for (let avatar of App.avatarList) {
-					$('#inputPlayerAvatar').append(function () {
-						return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
-					});
+					// generate avatar buttons from Avatar List
+					for (let avatar of App.avatarList) {
+						$('#inputPlayerAvatar').append(function () {
+							return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
+						});
+					}
+
+					$('#inputPlayerAvatar').css('display', 'grid');
+				} else {
+					IO.socket.emit('throwError', 'Please enter a nickname.');
 				}
-
-				$('#inputPlayerAvatar').css('display', 'grid');
 			},
 
 			onPlayerAvatarSelect: function () {
-				let playerAvatar = $('input[name=avatar]:checked', '#inputPlayerAvatar').val();
-				App.Player.myAvatar.id = playerAvatar;
+				var checkRadio = document.querySelector('input[name="avatar"]:checked');
 
-				$('#btnPlayerLaunchGame').css('display', 'inline-block');
-				$('#btnAvatarSelect').css('display', 'none');
-				$('#inputPlayerAvatar').css('display', 'none');
+				if (checkRadio != null) {
+					let playerAvatar = $('input[name=avatar]:checked', '#inputPlayerAvatar').val();
+					App.Player.myAvatar.id = playerAvatar;
 
-				$('#playerWaitingMessage')
-					.append('<p/>')
-					.text('Joined Game ' + App.gameId + '. Please wait for game to begin.');
+					$('#btnPlayerLaunchGame').css('display', 'inline-block');
+					$('#btnAvatarSelect').css('display', 'none');
+					$('#inputPlayerAvatar').css('display', 'none');
 
-				IO.socket.emit('playerSelectNameAvatar', { playerId: App.mySocketId, playerName: App.Player.myName, avatarId: App.Player.myAvatar.id });
+					$('#playerWaitingMessage')
+						.append('<p/>')
+						.text('Joined Game ' + App.gameId + '. Please wait for game to begin.');
+
+					IO.socket.emit('playerSelectNameAvatar', { playerId: App.mySocketId, playerName: App.Player.myName, avatarId: App.Player.myAvatar.id });
+				} else {
+					IO.socket.emit('throwError', 'Please select an avatar.');
+				}
 			},
 
 			onPlayerLaunchGameClick: function () {
@@ -920,8 +929,6 @@ jQuery(function ($) {
 			 */
 			displayAvatarSelect: function () {
 				$('#gameArea').html(App.$templateAvatarSelect);
-
-
 			},
 
 			/**
