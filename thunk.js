@@ -2,7 +2,7 @@ let io;
 let gameSocket;
 
 // const request = require('request');
-// var Config = require('./public/config.json');
+var Config = require('./public/config.json');
 // const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // Import Database credentials and functions
@@ -16,7 +16,7 @@ let connection = db.createCon(secret.dbCredentials);
 let questions = [];
 let switchups = [];
 
-const numRounds = 1;
+const numRounds = Config.numRounds;
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -37,7 +37,6 @@ exports.initGame = function (sio, socket) {
 	gameSocket.on('hostCountdownFinished', hostStartGame);
 	gameSocket.on('hostNextRound', hostNextRound);
 	gameSocket.on('allPloysSent', allPloysSent);
-
 	// Player Events
 	gameSocket.on('playerJoinGame', playerJoinGame);
 	gameSocket.on('playerSelectNameAvatar', playerSelectNameAvatar);

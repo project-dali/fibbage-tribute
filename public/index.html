@@ -224,14 +224,39 @@
         </div>
 	</script>
 
-	<script id="final-standings-template" type="text/template">
+	<script id="game-winner-template" type="text/template">
+		<header class="title">
+			<!-- current page title or system prompt/feedback -->
+			<h1>We have a winner!</h1>
+		</header>
+		<section class="primary">
+			<!-- description of main header, or forms/primary interactions -->
+			<div class="hightlighted-player">
+				<div id="winner-player-avatar">
+				</div>
+				<div class="player-name">
+					<p id="winner-player-name">ERROR!</p>
+				</div>
+			</div>
+		</section>
+		<section class="cta">
+		</section>
+		<section role="status" class=g oneself between all the views of the program. Used for debugging"system-status">
+			<!-- non-interactive system feedback -->
+			<div class="closed-captions">
+				<!-- narration captions -->
+			</div>
+		</section>
+	</script>
+
+	<script id="standings-template" type="text/template">
 		<div role="banner" class="banner">
 			<!-- flowy background -->
 		</div>
 		<main>
 			<header class="title">
 				<!-- current page title or system prompt/feedback -->
-				<h1>Final Scores</h1>
+				<h1 id="score-page-title">Round #0 Scores</h1>
 			</header>
 			<section class="primary">
 				<!-- description of main header, or forms/primary interactions -->

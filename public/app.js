@@ -221,7 +221,8 @@ jQuery(function ($) {
 			App.$playerAnswerTemplate = $('#player-answer-template').html();
 			App.$playerVoteTemplate = $('#player-vote-template').html();
 			App.$restartScreenTemplate = $('#restart-screen-template').html();
-			App.$standingsTemplate = $('#final-standings-template').html();
+			App.$standingsTemplate = $('#standings-template').html();
+			App.$winnerTemplate = $('#game-winner-template').html();
 			App.$creditsTemplate = $('#credits-screen-template').html();
 		},
 
@@ -400,7 +401,8 @@ jQuery(function ($) {
              * @param data{{round: *, word: *, answer: *, list: Array}}
              */
 			newQuestion: function (data) {
-				if(data.round == 1) {
+				App.$gameArea.html(App.$hostGame);
+				if(data.round >= 1) {
 					$('#promptBut').css('display', 'block');
 					$('#hostSwitchUp').css('display', 'block');
 				}
@@ -455,12 +457,55 @@ jQuery(function ($) {
 							round: App.currentRound
 						};
 
-						// Notify the server to start the next round.
-						setTimeout(function () {
-							IO.socket.emit('hostNextRound', data);
-						}, Config.answerDisplayCountdownDuration * 1000);
+						if(App.currentRound < Config.numRounds) {
+							setTimeout(function () {
+								App.Host.displayRoundStandings(data);
+							}, Config.answerDisplayCountdownDuration * 1000);
+						} else {
+							setTimeout(function () {
+								$('.single-player-standing').remove();
+								IO.socket.emit('hostNextRound', data);
+							}, Config.answerDisplayCountdownDuration * 1000);
+						}					
 					}
 				}
+			},
+
+			displayRoundStandings: function (data) {
+				$('#gameArea').html(App.$standingsTemplate);
+
+				$('#score-page-title').text('Round #' + App.currentRound + ' Standings');
+
+				// Set up a variable to hold all the player information and standings without messing up the original.
+				let playersList = App.Host.players;
+
+				// Create an array based off the Object playersList so we can use the sort function on it.
+				let sortablePlayersList = [];
+				for (let player in playersList) {
+					sortablePlayersList.push([player, playersList[player]]);
+				}
+
+				// Sort the array by every object's playerScore, in descending order.
+				sortablePlayersList.sort(function(a, b) {
+					return b[1].playerScore - a[1].playerScore;
+				});
+
+				// Remake the playersList object using the values from the now-sorted array.
+				playersList = {};
+				sortablePlayersList.forEach(function(item){
+					playersList[item[0]]=item[1];
+				});
+
+				// Append each of the players to the OL for Standings.
+				Object.keys(playersList).forEach(function (playerId) {
+					$('#standings-list').append(`<li class="single-player-standing"><div class="player"><p>${App.Host.players[playerId].playerName}</p><p>${App.Host.players[playerId].playerScore}</p></div></li>`);
+				});
+
+				// Notify the server to start the next round.
+				setTimeout(function () {
+					$('.single-player-standing').remove();
+					IO.socket.emit('hostNextRound', data);
+				}, Config.answerDisplayCountdownDuration * 1000);
 			},
 
 			displayAnswers: function () {
@@ -607,8 +652,46 @@ jQuery(function ($) {
              * All rounds have played out. End the game.
              * @param data
              */
-			endGame: function (data) {
+			endGame: function () {
+				$('#gameArea').html(App.$winnerTemplate);
+
+				console.log('working');
+
+				var bestScore = 0;
+				Object.keys(App.Host.players).forEach(function (playerId) {
+					if (App.Host.players[playerId].playerScore > bestScore)
+						bestScore = App.Host.players[playerId].playerScore;
+				});
+
+				var winners = [];
+				Object.keys(App.Host.players).forEach(function (playerId) {
+					if (App.Host.players[playerId].playerScore == bestScore)
+						winners.push(App.Host.players[playerId].playerName);
+				});
+
+				// Display the winner (or tie game message)
+				if (winners.length > 1) {
+					var winnersStr = '';
+					winners.forEach(function (winner, index) {
+						if (index == winners.length - 1)
+							winnersStr += 'And ';
+						winnersStr += winner + ' ';
+					});
+					$('#winner-player-name').text(winnersStr);
+				} else {
+					$('#winner-player-name').text(winners[0]);
+				}
+
+				// After 10 seconds, move on to the Game Standings screen
+				setTimeout(function(){
+					App.Host.gameStandings();
+				}, Config.answerDisplayCountdownDuration * 1000);
+			},
+
+			gameStandings: function () {
 				$('#gameArea').html(App.$standingsTemplate);
+
+				$('#score-page-title').text('Final Standings');
 
 				// Set up a variable to hold all the player information and standings without messing up the original.
 				let playersList = App.Host.players;
@@ -635,38 +718,10 @@ jQuery(function ($) {
 					$('#standings-list').append(`<li><div class="player"><p>${App.Host.players[playerId].playerName}</p><p>${App.Host.players[playerId].playerScore}</p></div></li>`);
 				});
 
-				// Everything after this point is old, I kept it around in case we ever need to figure out the definite winners and display them again.
-
-				// var bestScore = 0;
-				// Object.keys(App.Host.players).forEach(function (playerId) {
-				// 	if (App.Host.players[playerId].playerScore > bestScore)
-				// 		bestScore = App.Host.players[playerId].playerScore;
-				// });
-
-				// var winners = [];
-				// Object.keys(App.Host.players).forEach(function (playerId) {
-				// 	if (App.Host.players[playerId].playerScore == bestScore)
-				// 		winners.push(App.Host.players[playerId].playerName);
-				// });
-
-				// // Display the winner (or tie game message)
-				// if (winners.length > 1) {
-				// 	var winnersStr = '';
-				// 	winners.forEach(function (winner, index) {
-				// 		if (index == winners.length - 1)
-				// 			winnersStr += 'And ';
-				// 		winnersStr += winner + ' ';
-				// 	});
-				// 	$('#hostWord').text(winnersStr + 'Win !');
-				// } else {
-				// 	$('#hostWord').text(winners[0] + ' Wins !');
-				// }
-				// App.doTextFit('#hostWord');
-
 				// After 10 seconds, move on to the credits screen
 				setTimeout(function(){
 					$('#gameArea').html(App.$creditsTemplate);
-				}, 10000);
+				}, Config.answerDisplayCountdownDuration * 1000);
 
 				// Reset game data + visuals
 				App.Host.numPlayersInRoom = 0;

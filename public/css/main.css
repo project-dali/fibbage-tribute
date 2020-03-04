@@ -138,6 +138,11 @@ button {
     color: #000;
 }
 
+button:disabled, button[disabled] {
+  background-color: #cccccc;
+  color: #666666;
+}
+
 input {
     color: #000;
 }
@@ -1259,7 +1264,7 @@ input[type=text]:invalid {
 }
 
 #playerInfos {
-    display: grid;
+    display: none;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
 }
@@ -1299,4 +1304,8 @@ input[type=text]:invalid {
     background-color: #ECFFE0;
     overflow: hidden;
     flex-grow: 1;
+}
+
+.team-members {
+    color: #000 !important;
 }

@@ -5,6 +5,7 @@
     "goodAnswer": 10,
     "ployAnswer": 5,
     "badAnswer": -3,
+    "numRounds": 3,
     "languages": {
         "en": {
             "name": "English",
