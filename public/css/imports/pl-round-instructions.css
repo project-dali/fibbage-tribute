@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=McLaren&display=swap');
+
+
+/* Round Instructions */
+
+.title { 
+position: absolute;
+width: 285px;
+height: 63px;
+left: 45px;
+top: 77px;
+font-family: Avenir Next, 'Lato', sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 36px;
+line-height: 85%;
+/* or 31px */
+
+text-align: center;
+
+color: #FFFFFF;
+} 
+
+.round-title { 
+    /* Rectangle 7 */
+
+
+position: absolute;
+width: 170px;
+height: 50px;
+left: 105px;
+top: 160px;
+
+background: #ED1D69;
+border-radius: 25px;
+}
+
+.think-twice { 
+    /* Think Twice */
+position: absolute;
+width: 104.22px;
+height: 22.99px;
+left: 30px;
+top: 12px;
+font-family: Avenir Next, 'Lato', sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 18px;
+line-height: 150.99%;
+/* identical to box height, or 22px */
+
+text-align: center;
+
+color: #FFFFFF;
+}
+
+.instructions { 
+    /* Group 186 */
+position: absolute;
+width: 292px;
+height: 396px;
+left: 45px;
+top: 234px;
+}
+.cta { 
+position: absolute;
+width: 199px;
+height: 42px;
+left: 93px;
+top: 470px;
+
+}
+
+li { 
+
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 124.99%;
+/* or 22px */
+}
+
+.ready { 
+    position: absolute;
+left: 3%;
+right: 22.13%;
+top: 81.71%;
+bottom: 11.99%;
+height: 55px;
+background: #ED1B69;
+border-radius: 67px;
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 28px;
+text-align: center;
+color: white;
+}

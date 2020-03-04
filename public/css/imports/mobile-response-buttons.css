@@ -1,0 +1,41 @@
+.responsebutton {
+    margin: .875em;
+    background-color:rgba(255, 255, 255, 0);
+    border: .125em solid #A65875;
+box-sizing: border-box;
+border-radius: .75em;
+    overflow:auto;
+    float:left;
+    width: 19.8em;
+    height: 4.375em;
+    overflow: hidden;
+}
+
+.responsebutton label {
+    width: 19.8em;
+    height: 4.375em;
+}
+
+.responsebutton label span {
+    text-align:center;
+    padding-top: 1.375em;
+    display:block;
+    font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 1.125em;
+line-height: 1.375em;
+height: 100%;
+transition: ease-in-out .25s;
+color: #F2F2F2;
+}
+
+.responsebutton label input {
+    position:absolute;
+    top:-2.8em;
+}
+
+.responsebutton input:checked + span {
+    background-color:#ED1B69;
+    color:#fff;
+}

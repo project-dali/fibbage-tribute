@@ -29,6 +29,7 @@ jQuery(function ($) {
 			IO.socket.on('connected', IO.onConnected);
 			IO.socket.on('newGameCreated', IO.onNewGameCreated);
 			IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
+			IO.socket.on('playerJoinRoomWithNameAvatar', IO.playerJoinRoomWithNameAvatar);
 			IO.socket.on('beginNewGame', IO.beginNewGame);
 			IO.socket.on('newQuestion', IO.onNewQuestion);
 			IO.socket.on('ploysList', IO.onPloysList);
@@ -42,7 +43,8 @@ jQuery(function ($) {
 		/**
          * The client is successfully connected!
          */
-		onConnected: function () {
+		onConnected: function (data) {
+			App.avatarList = data.avatarList;
 			// Cache a copy of the client's socket.IO session ID on the App
 			App.mySocketId = IO.socket.socket.sessionid;
 			// console.log(data.message);
@@ -68,6 +70,12 @@ jQuery(function ($) {
 			// So on the 'host' browser window, the App.Host.updateWiatingScreen function is called.
 			// And on the player's browser, App.Player.updateWaitingScreen is called.
 			App[App.myRole].updateWaitingScreen(data);
+		},
+
+		playerJoinRoomWithNameAvatar: function (data) {
+			if (App.myRole === 'Host') {
+				App.Host.updatePlayerInfo(data);
+			}
 		},
 
 		/**
@@ -170,6 +178,11 @@ jQuery(function ($) {
          */
 		currentRound: 0,
 
+		/**
+		 * Contains a list of all system avatars, their ID's 
+		 */
+		avatarList: [],
+
 		/* *************************************
          *                Setup                *
          * *********************************** */
@@ -193,10 +206,14 @@ jQuery(function ($) {
 			App.$doc = $(document);
 
 			// Templates
+			App.$banner = $('#banner-template');
+			App.$footer = $('#footer-template');
 			App.$gameArea = $('#gameArea');
 			App.$templateIntroScreen = $('#intro-screen-template').html();
 			App.$templateNewGame = $('#create-game-template').html();
 			App.$templateJoinGame = $('#join-game-template').html();
+			App.$templateNicknameSelect = $('#nickname-select-template').html();
+			App.$templateAvatarSelect = $('#avatar-select-template').html();
 			App.$hostGame = $('#host-game-template').html();
 			App.$playerInfo = $('#player-info-template').html();
 			App.$ployTemplate = $('#ploy-template').html();
@@ -204,6 +221,9 @@ jQuery(function ($) {
 			App.$playerAnswerTemplate = $('#player-answer-template').html();
 			App.$playerVoteTemplate = $('#player-vote-template').html();
 			App.$restartScreenTemplate = $('#restart-screen-template').html();
+			App.$standingsTemplate = $('#standings-template').html();
+			App.$winnerTemplate = $('#game-winner-template').html();
+			App.$creditsTemplate = $('#credits-screen-template').html();
 		},
 
 		/**
@@ -216,6 +236,8 @@ jQuery(function ($) {
 			// Player
 			App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
 			App.$doc.on('click', '#btnStart', App.Player.onPlayerStartClick);
+			App.$doc.on('click', '#btnNicknameSelect', App.Player.onPlayerNicknameSelect);
+			App.$doc.on('click', '#btnAvatarSelect', App.Player.onPlayerAvatarSelect);
 			App.$doc.on('click', '#btnSendPloy', App.Player.onPlayerSendPloyClick);
 			// App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
 			App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
@@ -278,7 +300,7 @@ jQuery(function ($) {
 
 			/**
              * The Host screen is displayed for the first time.
-             * @param data{{ gameId: int, mySocketId: * }}
+             * @param data{{ gameId: int, mySocketId: *, avatarList: [] }}
              */
 			gameInit: function (data) {
 				App.gameId = data.gameId;
@@ -300,33 +322,18 @@ jQuery(function ($) {
 
 				// Display the URL on screen
 				$('#gameURL').text(window.location.href);
+				$('#gameURL').attr('href', window.location.href);
 				//App.doTextFit('#gameURL');
 
+				// put space halfway through gameId
+				let gameIdDisplay = String(App.gameId).slice(0, 3) + ' ' + String(App.gameId).slice(3);
+
 				// Show the gameId / room id on screen
-				$('#spanNewGameCode').text(App.gameId);
+				$('#spanNewGameCode').text(gameIdDisplay);
 			},
 
 			showTemplateNewGame: function () {
 				App.$gameArea.html(App.$templateNewGame);
-
-				var $flags = $('#flags');
-				Object.keys(Config.languages).forEach(code => {
-					var $flag = $('<img src="images/flags/' + Config.languages[code].flag_path + '">');
-					$flag.addClass('flag');
-					$flag.click(function () {
-						App.Host.selectFlag(this, code);
-					});
-					$flags.append($flag);
-				});
-
-				$('.flag')[0].click();
-			},
-
-			selectFlag: function ($flag, code) {
-				App.language = code;
-				console.log(code);
-				$('.flag').removeClass('selectedFlag');
-				$($flag).addClass('selectedFlag');
 			},
 
 			/**
@@ -338,10 +345,6 @@ jQuery(function ($) {
 				if (App.Host.isNewGame) {
 					App.Host.displayNewGameScreen();
 				}
-				// Update host screen
-				$('#playersWaiting')
-					.append('<p/>')
-					.text('Player ' + data.playerName + ' joined the game.');
 
 				// Store the new player's data on the Host.
 				App.Host.players[data.playerId] = data;
@@ -350,8 +353,18 @@ jQuery(function ($) {
 				App.Host.numPlayersInRoom += 1;
 			},
 
+			updatePlayerInfo: function (data) {
+				App.Host.players[data.playerId].playerName = data.playerName;
+				App.Host.players[data.playerId].avatarId = data.avatarId;
+
+				// Update host screen
+				$('#playersWaiting')
+					.append('<p/>')
+					.text('Player ' + data.playerName + ' joined the game.');
+			},
+
 			launchGame: function (data) {
-				IO.socket.emit('hostRoomFull', { gameId: App.gameId, language: App.language });
+				IO.socket.emit('hostRoomFull', { gameId: App.gameId, language: 'en' });
 			},
 
 			/**
@@ -371,6 +384,7 @@ jQuery(function ($) {
 
 				Object.keys(App.Host.players).forEach(function (key) {
 					const player = App.Host.players[key];
+					console.log(player);
 
 					const $playerInfo = $(App.$playerInfo).appendTo('#playerInfos');
 
@@ -387,14 +401,24 @@ jQuery(function ($) {
              * @param data{{round: *, word: *, answer: *, list: Array}}
              */
 			newQuestion: function (data) {
+				App.$gameArea.html(App.$hostGame);
+				if(data.round >= 1) {
+					$('#promptBut').css('display', 'block');
+					$('#hostSwitchUp').css('display', 'block');
+				}
 				// Insert the new word into the DOM
 				$('#hostWord').text(data.question);
 				App.doTextFit('#hostWord');
-
+				if(typeof data.switchup !== 'undefined') {
+					$('#hostSwitchUp').text(data.switchup);
+					App.doTextFit('#hostSwitchUp');	
+				}
+				
 				$('#playersAnswersArea').empty();
 
 				// Update the data for the current round
 				App.Host.currentQuestion = data.question;
+				App.Host.currentSwitchUp = data.switchup;
 				App.Host.currentCorrectAnswer = data.answer;
 				App.Host.currentRound = data.round;
 				App.Host.nbPloys = 0;
@@ -433,12 +457,55 @@ jQuery(function ($) {
 							round: App.currentRound
 						};
 
-						// Notify the server to start the next round.
-						setTimeout(function () {
-							IO.socket.emit('hostNextRound', data);
-						}, Config.answerDisplayCountdownDuration * 1000);
+						if(App.currentRound < Config.numRounds) {
+							setTimeout(function () {
+								App.Host.displayRoundStandings(data);
+							}, Config.answerDisplayCountdownDuration * 1000);
+						} else {
+							setTimeout(function () {
+								$('.single-player-standing').remove();
+								IO.socket.emit('hostNextRound', data);
+							}, Config.answerDisplayCountdownDuration * 1000);
+						}					
 					}
 				}
+			},
+
+			displayRoundStandings: function (data) {
+				$('#gameArea').html(App.$standingsTemplate);
+
+				$('#score-page-title').text('Round #' + App.currentRound + ' Standings');
+
+				// Set up a variable to hold all the player information and standings without messing up the original.
+				let playersList = App.Host.players;
+
+				// Create an array based off the Object playersList so we can use the sort function on it.
+				let sortablePlayersList = [];
+				for (let player in playersList) {
+					sortablePlayersList.push([player, playersList[player]]);
+				}
+
+				// Sort the array by every object's playerScore, in descending order.
+				sortablePlayersList.sort(function(a, b) {
+					return b[1].playerScore - a[1].playerScore;
+				});
+
+				// Remake the playersList object using the values from the now-sorted array.
+				playersList = {};
+				sortablePlayersList.forEach(function(item){
+					playersList[item[0]]=item[1];
+				});
+
+				// Append each of the players to the OL for Standings.
+				Object.keys(playersList).forEach(function (playerId) {
+					$('#standings-list').append(`<li class="single-player-standing"><div class="player"><p>${App.Host.players[playerId].playerName}</p><p>${App.Host.players[playerId].playerScore}</p></div></li>`);
+				});
+
+				// Notify the server to start the next round.
+				setTimeout(function () {
+					$('.single-player-standing').remove();
+					IO.socket.emit('hostNextRound', data);
+				}, Config.answerDisplayCountdownDuration * 1000);
 			},
 
 			displayAnswers: function () {
@@ -520,6 +587,7 @@ jQuery(function ($) {
 							round: data.round,
 							gameId: data.gameId,
 							question: App.Host.currentQuestion,
+							switchup: App.Host.currentSwitchUp,
 							answer: App.Host.currentCorrectAnswer,
 							ploys: []
 						};
@@ -581,15 +649,20 @@ jQuery(function ($) {
 			},
 
 			/**
-             * All 10 rounds have played out. End the game.
+             * All rounds have played out. End the game.
              * @param data
              */
-			endGame: function (data) {
+			endGame: function () {
+				$('#gameArea').html(App.$winnerTemplate);
+
+				console.log('working');
+
 				var bestScore = 0;
 				Object.keys(App.Host.players).forEach(function (playerId) {
 					if (App.Host.players[playerId].playerScore > bestScore)
 						bestScore = App.Host.players[playerId].playerScore;
 				});
+
 				var winners = [];
 				Object.keys(App.Host.players).forEach(function (playerId) {
 					if (App.Host.players[playerId].playerScore == bestScore)
@@ -604,18 +677,59 @@ jQuery(function ($) {
 							winnersStr += 'And ';
 						winnersStr += winner + ' ';
 					});
-					$('#hostWord').text(winnersStr + 'Win !');
+					$('#winner-player-name').text(winnersStr);
 				} else {
-					$('#hostWord').text(winners[0] + ' Wins !');
+					$('#winner-player-name').text(winners[0]);
 				}
-				App.doTextFit('#hostWord');
 
-				$('#playersAnswersArea').empty();
+				// After 10 seconds, move on to the Game Standings screen
+				setTimeout(function(){
+					App.Host.gameStandings();
+				}, Config.answerDisplayCountdownDuration * 1000);
+			},
 
-				// Reset game data
+			gameStandings: function () {
+				$('#gameArea').html(App.$standingsTemplate);
+
+				$('#score-page-title').text('Final Standings');
+
+				// Set up a variable to hold all the player information and standings without messing up the original.
+				let playersList = App.Host.players;
+
+				// Create an array based off the Object playersList so we can use the sort function on it.
+				let sortablePlayersList = [];
+				for (let player in playersList) {
+					sortablePlayersList.push([player, playersList[player]]);
+				}
+
+				// Sort the array by every object's playerScore, in descending order.
+				sortablePlayersList.sort(function(a, b) {
+					return b[1].playerScore - a[1].playerScore;
+				});
+
+				// Remake the playersList object using the values from the now-sorted array.
+				playersList = {};
+				sortablePlayersList.forEach(function(item){
+					playersList[item[0]]=item[1];
+				});
+
+				// Append each of the players to the OL for Standings.
+				Object.keys(playersList).forEach(function (playerId) {
+					$('#standings-list').append(`<li><div class="player"><p>${App.Host.players[playerId].playerName}</p><p>${App.Host.players[playerId].playerScore}</p></div></li>`);
+				});
+
+				// After 10 seconds, move on to the credits screen
+				setTimeout(function(){
+					$('#gameArea').html(App.$creditsTemplate);
+				}, Config.answerDisplayCountdownDuration * 1000);
+
+				// Reset game data + visuals
 				App.Host.numPlayersInRoom = 0;
 				App.Host.isNewGame = true;
 				App.Host.players = {};
+				$('#playersAnswersArea').empty();
+				$('#promptBut').css('display', 'none');
+				$('#hostSwitchUp').css('display', 'none');
 			},
 
 			/**
@@ -645,6 +759,21 @@ jQuery(function ($) {
 			myName: '',
 
 			/**
+			 * 
+			 * id: 0 = unassigned
+			 * id: 1-7 = auto incremented id in thunk.avatar table
+			 * name: avatar's name in thunk.avatar table
+			 * animationName: which animation should be running
+			 * animationIsPlaying: 0 = no, 1 = yes
+			 */
+			myAvatar: {
+				id: 0,
+				name: '',
+				animationName: '',
+				animationIsPlaying: 0
+			},
+
+			/**
              * Click handler for the 'JOIN' button
              */
 			onJoinClick: function () {
@@ -652,6 +781,10 @@ jQuery(function ($) {
 
 				// Display the Join Game HTML on the player's screen.
 				App.$gameArea.html(App.$templateJoinGame);
+			},
+
+			selectAvatarId: function () {
+				console.log($('avatarGrid'));
 			},
 
 			/**
@@ -663,16 +796,55 @@ jQuery(function ($) {
 
 				// collect data to send to the server
 				var data = {
-					gameId: +($('#inputGameId').val()),
-					playerName: $('#inputPlayerName').val() || 'anon'
+					gameId: +($('#inputGameId').val())
 				};
+
+				App.myRole = 'Player';
 
 				// Send the gameId and playerName to the server
 				IO.socket.emit('playerJoinGame', data);
+			},
 
-				// Set the appropriate properties for the current player.
-				App.myRole = 'Player';
-				App.Player.myName = data.playerName;
+			onPlayerNicknameSelect: function () {
+				if ($('#inputPlayerName').val()) {
+					let playerName = $('#inputPlayerName').val() || 'anon';
+
+					App.Player.myName = playerName;
+
+					$('#gameArea').html(App.$templateAvatarSelect);
+
+					// generate avatar buttons from Avatar List
+					for (let avatar of App.avatarList) {
+						$('#inputPlayerAvatar').append(function () {
+							return `<div class="form-control"><label for="${avatar.id}">${avatar.name}</label><input type="radio" name="avatar" id="${avatar.id}" value="${avatar.id}"></div>`;
+						});
+					}
+
+					$('#inputPlayerAvatar').css('display', 'grid');
+				} else {
+					IO.socket.emit('throwError', 'Please enter a nickname.');
+				}
+			},
+
+			onPlayerAvatarSelect: function () {
+				var checkRadio = document.querySelector('input[name="avatar"]:checked');
+
+				if (checkRadio != null) {
+					let playerAvatar = $('input[name=avatar]:checked', '#inputPlayerAvatar').val();
+					App.Player.myAvatar.id = playerAvatar;
+
+					$('#btnPlayerLaunchGame').css('display', 'inline-block');
+					$('#btnAvatarSelect').css('display', 'none');
+					$('#inputPlayerAvatar').css('display', 'none');
+
+					$('#playerWaitingMessage')
+						.append('<p/>')
+						.text('Joined Game ' + App.gameId + '. Please wait for game to begin.');
+
+					IO.socket.emit('playerSelectNameAvatar', { playerId: App.mySocketId, playerName: App.Player.myName, avatarId: App.Player.myAvatar.id });
+				} else {
+					IO.socket.emit('throwError', 'Please select an avatar.');
+				}
 			},
 
 			onPlayerLaunchGameClick: function () {
@@ -735,7 +907,28 @@ jQuery(function ($) {
 				App.currentRound = 0;
 
 				// $('#gameArea').html("<h3>Waiting on host to start new game.</h3>");
-				$('#gameArea').html(App.$restartScreenTemplate);
+				// $('#gameArea').html(App.$restartScreenTemplate);
+				$('#gameArea').html(App.$templateAvatarSelect);
+			},
+
+			/**
+			 * Room has been joined, Display nickname selection view
+			 * @param data gameId and other stuff
+			 */
+			displayNicknameSelect: function (data) {
+				if (IO.socket.socket.sessionid === data.playerId) {
+					App.gameId = data.gameId;
+				}
+
+				$('#gameArea').html(App.$templateNicknameSelect);
+			},
+
+			/**
+			 * Room has been joined, Display nickname selection view
+			 * @param data gameId and other stuff
+			 */
+			displayAvatarSelect: function () {
+				$('#gameArea').html(App.$templateAvatarSelect);
 			},
 
 			/**
@@ -743,17 +936,7 @@ jQuery(function ($) {
              * @param data
              */
 			updateWaitingScreen: function (data) {
-				if (IO.socket.socket.sessionid === data.playerId) {
-					App.myRole = 'Player';
-					App.gameId = data.gameId;
-
-					$('#btnPlayerLaunchGame').css('display', 'inline-block');
-					$('#btnStart').css('display', 'none');
-
-					$('#playerWaitingMessage')
-						.append('<p/>')
-						.text('Joined Game ' + data.gameId + '. Please wait for game to begin.');
-				}
+				App.Player.displayNicknameSelect(data);
 			},
 
 			/**
@@ -792,14 +975,12 @@ jQuery(function ($) {
 						.addClass('btn')
 						.val(this.value)
 						.html(this.value.toUpperCase());
-					console.log('temp', App.mySocketId, this.playerId, App.mySocketId == this.playerId);
+					// console.log('temp', App.mySocketId, this.playerId, App.mySocketId == this.playerId);
 					if (App.mySocketId == this.playerId)
 						$button.attr('disabled', 'disabled');
 					var $li = $('<li/>');
 					$li.append($button);
 					$list.append($li);
-
-					const data = {};
 
 					$button.on('click', this, App.Player.onPlayerAnswerClick);
 				});
@@ -878,7 +1059,6 @@ jQuery(function ($) {
 				alignVert: true,
 				multiLine: true
 			});
-			console.log(el);
 		}
 	};
 

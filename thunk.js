@@ -1,7 +1,7 @@
 let io;
 let gameSocket;
 
-const request = require('request');
+// const request = require('request');
 var Config = require('./public/config.json');
 // const NODE_ENV = process.env.NODE_ENV || 'dev';
 
@@ -14,6 +14,9 @@ let connection = db.createCon(secret.dbCredentials);
 
 // store the questions for game in here
 let questions = [];
+let switchups = [];
+
+const numRounds = Config.numRounds;
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -24,7 +27,9 @@ let questions = [];
 exports.initGame = function (sio, socket) {
 	io = sio;
 	gameSocket = socket;
-	gameSocket.emit('connected', { message: 'You are connected!' });
+	getSystemAvatars().then((results) => {
+		gameSocket.emit('connected', { message: 'You are connected!', avatarList: results });
+	});
 
 	// Host Events
 	gameSocket.on('hostCreateNewGame', hostCreateNewGame);
@@ -32,13 +37,14 @@ exports.initGame = function (sio, socket) {
 	gameSocket.on('hostCountdownFinished', hostStartGame);
 	gameSocket.on('hostNextRound', hostNextRound);
 	gameSocket.on('allPloysSent', allPloysSent);
-
 	// Player Events
 	gameSocket.on('playerJoinGame', playerJoinGame);
+	gameSocket.on('playerSelectNameAvatar', playerSelectNameAvatar);
 	gameSocket.on('playerLaunchGameClick', playerLaunchGameClick);
 	gameSocket.on('playerAnswer', playerAnswer);
 	gameSocket.on('playerSendPloy', playerSendPloy);
 	gameSocket.on('playerRestart', playerRestart);
+	gameSocket.on('throwError', throwError);
 };
 
 /* *******************************
@@ -53,44 +59,27 @@ exports.initGame = function (sio, socket) {
 function hostCreateNewGame() {
 	/**
 	 * generates random 6 digit room code
-	 * @returns string roomID
+	 * CAUTION. theoretically it is possible to generate the
+	 * same room code as another host
+	 * @returns string roomId
      */
-	let createRoomID = () => {
+	let createRoomId = () => {
 		let roomID = '';
 		for (let i = 0; i < 6; i++) {
-			roomID += Math.floor(Math.random() * 10);
+			roomID += String(Math.floor(Math.random() * 10));
 		}
+		while (roomID < 100000) {
+			roomID = 0;
+			for (let i = 0; i < 6; i++) {
+				roomID += String(Math.floor(Math.random() * 10));
+			}
+		}
+		roomID = parseInt(roomID);
 		return roomID;
 	};
 
-	// /**
-	//  * Creates a room with supplied room code,
-	//  * recursively creates new code if one already exists in db
-	//  * @param {number} __roomID 6 digit room code
-	//  * @param {function} callback called regardless of success
-	//  */
-	// let createRoom = (__roomID, callback) => {
-	// 	let query = 'INSERT INTO thunk.room (id)';
-	// 	query += `VALUES (${__roomID});`;
-	// 	db.sendQuery(query, connection, (err, results, fields) => {
-	// 		if (err) { // if duplicate entry, make a new code and try again
-	// 			if (err.errno === 1062) {
-	// 				__roomID = createRoomID();
-	// 				createRoom(__roomID);
-	// 			} // if another SQL error, stop everything
-	// 			throw err;
-	// 		}
-	// 		callback(__roomID);
-	// 	});
-	// };
-
-	// let roomID = createRoomID();
-	// createRoom(roomID, (roomID) => {
-	// 	console.log(roomID);
-	// });
-
 	// Create a unique Socket.IO Room
-	let thisGameId = createRoomID();
+	let thisGameId = createRoomId();
 
 	// Return the Room ID (gameId) and the socket ID (mySocketId) to the browser client
 	this.emit('newGameCreated', { gameId: thisGameId, mySocketId: this.id });
@@ -117,6 +106,7 @@ function hostPrepareGame(data) {
 		return new Promise((resolve) => {
 			let query = `SELECT * FROM thunk.prompt 
 			WHERE round_type='think_twice'
+			ORDER BY RAND()
 			LIMIT ${amount};`;
 
 			db.sendQuery(query, connection, (err, results, fields) => {
@@ -132,9 +122,8 @@ function hostPrepareGame(data) {
 		});
 	};
 
-	getPrompt(10).then((results) => {
-		console.log(results);
-
+	// change to 6 when adding to production
+	getPrompt(numRounds).then((results) => {
 		questions = [];
 
 		for (let textRow of results) {
@@ -144,25 +133,44 @@ function hostPrepareGame(data) {
 			});
 		}
 
-		console.log(questions);
-
 		io.sockets.in(data.gameId).emit('beginNewGame', data);
 	});
 
-	// // const domain = NODE_ENV == 'prod' ? 'https://fibbage-tribute-questions.herokuapp.com' : 'http://localhost:3000';
-	// const domain = 'https://fibbage-tribute-questions.herokuapp.com';
-	// const url = domain + '/question/random/' + Config.nbRounds + '?lan=' + data.language;
-	// console.log(url);
-	// request.get(url, (error, response, body) => {
-	// 	if (error) {
-	// 		return console.dir(error);
-	// 	}
-	// 	questions = JSON.parse(body);
-	// 	console.log('Questions :', questions);
+	let getSwitchUp = (amount) => {
+		return new Promise((resolve) => {
+			let query = `SELECT * FROM thunk.switch_up 
+			WHERE round_type='think_twice'
+			ORDER BY RAND()
+			LIMIT ${amount};`;
 
-	// 	//console.log("All Players Present. Preparing game...");
-	// 	io.sockets.in(data.gameId).emit('beginNewGame', data);
-	// });
+			db.sendQuery(query, connection, (err, results, fields) => {
+				if (err) { // if duplicate entry, make a new code and try again
+					throw err;
+				}
+				if (results.length > 0) { // a room with this ID exists
+					resolve(results);
+				} else {
+					resolve(false); // this should be a reject probably
+				}
+			});
+		});
+	};
+
+	getSwitchUp(numRounds-1).then((results) => {
+		console.log(results);
+
+		switchups = [];
+
+		for (let textRow of results) {
+			switchups.push({
+				switchup: textRow.switch_up
+			});
+		}
+
+		console.log(switchups);
+
+		io.sockets.in(data.gameId).emit('beginNewGame', data);
+	});
 }
 
 /*
@@ -170,7 +178,6 @@ function hostPrepareGame(data) {
  * @param gameId The game ID / room ID
  */
 function hostStartGame(gameId) {
-	console.log('Game Started.');
 	sendQuestion(0, gameId);
 }
 
@@ -195,13 +202,6 @@ function hostNextRound(data) {
 function allPloysSent(data) {
 	var ploys = shuffle(data.ploys.slice());
 
-	// Pick a random spot in the decoy list to put the correct answer
-	var rnd = Math.floor(Math.random() * (ploys.length + 1));
-	ploys.splice(rnd, 0, {
-		playerId: 'answer',
-		value: data.answer
-	});
-
 	data.list = ploys;
 
 	io.sockets.in(data.gameId).emit('ploysList', data);
@@ -221,7 +221,7 @@ function allPloysSent(data) {
  */
 function playerJoinGame(data) {
 	//console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
-
+	// console.log('player joining game with avatar: ' + data.playerAvatar);
 	// A reference to the player's Socket.IO socket object
 	var sock = this;
 
@@ -245,6 +245,19 @@ function playerJoinGame(data) {
 		// Otherwise, send an error message back to the player.
 		this.emit('error', { message: 'This room does not exist.' });
 	}
+}
+
+function throwError(errorMessage) {
+	this.emit('error', { message: errorMessage });
+}
+
+/**
+ * 
+ * @param {object} data data.playerName, data.playerAvatar
+ */
+function playerSelectNameAvatar(data) {
+	io.sockets.in(data.gameId).emit('playerJoinRoomWithNameAvatar', data);
+
 }
 
 function playerLaunchGameClick(gameId) {
@@ -284,7 +297,7 @@ function playerRestart(data) {
 
 	// Emit the player's data back to the clients in the game room.
 	data.playerId = this.id;
-	io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+	io.sockets.in(data.gameId).emit('playerJoinRoomWithNameAvatar', data);
 }
 
 /* *************************
@@ -293,6 +306,23 @@ function playerRestart(data) {
    *                       *
    ************************* */
 
+function getSystemAvatars() {
+	return new Promise((resolve) => {
+		let query = 'SELECT * FROM thunk.avatar';
+
+		db.sendQuery(query, connection, (err, results, fields) => {
+			if (err) {
+				throw err;
+			}
+			if (results.length > 0) { // good
+				resolve(results);
+			} else {
+				resolve(false); // this should be a reject probably
+			}
+		});
+	});
+}
+
 /**
  * Get a word for the host, and a list of words for the player.
  *
@@ -300,22 +330,13 @@ function playerRestart(data) {
  * @param gameId The room identifier
  */
 function sendQuestion(wordPoolIndex, gameId) {
-	/*
-    const url = 'https://fibbage-tribute-questions.herokuapp.com/question/random?lan=' + Config.language;
-    request.get(url, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        let json = JSON.parse(body);
-        json.answer = json.solution;
-        json.round = wordPoolIndex;
 
-        io.sockets.in(gameId).emit('newQuestion', json);
-    });
-    */
 	var json = questions[wordPoolIndex];
 	json.answer = json.solution;
 	json.round = wordPoolIndex;
+	if(wordPoolIndex > 0) {
+		json.switchup = switchups[wordPoolIndex-1].switchup;
+	}
 	io.sockets.in(gameId).emit('newQuestion', json);
 }
 

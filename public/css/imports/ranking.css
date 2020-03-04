@@ -1,0 +1,74 @@
+.score-standings {
+	display: grid; grid-template-columns: repeat(2, 1fr);
+	/*! columns: 2; */
+	width: 48rem;
+	margin: 2rem auto 0;
+	grid-gap: 1rem;
+	margin-bottom: 1rem;
+	grid-auto-flow: column;
+	grid-template-rows: repeat(4,auto);
+}
+
+ol {
+	list-style: none;
+	counter-reset: thunk-counter;
+}
+
+ol>li {
+	--counter-size: 3.875rem;
+	counter-increment: thunk-counter;
+	position: relative;
+	margin-left: calc(var(--counter-size) + .75rem);
+	min-height: var(--counter-size);
+	display: inline-flex;
+	align-items: center;
+	margin-bottom: .5rem;
+	/*! margin-right: ; */
+}
+
+ol>li::before {
+	content: counter(thunk-counter);
+	color: #fff;
+	font-size: 2.25rem;
+	/* font-weight: bold; */
+	position: absolute;
+	left: calc(-1 * var(--counter-size) - .75rem);
+	line-height: var(--counter-size);
+	width: var(--counter-size);
+	height: var(--counter-size);
+	top: calc(50% - var(--counter-size)/2);
+	background: rgba(237, 29, 105, 0.3);;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.score-standings .player {
+	--pl-avi-size: 7.5rem;
+	display: grid;
+	grid-template-columns: var(--pl-avi-size) auto;
+	grid-template-rows: calc(var(--pl-avi-size)/2) auto;
+	grid-template-areas:
+			"pl-avi pl-name"
+			"pl-avi pl-score";
+	width: 16rem;
+	grid-gap: 0.5rem;
+	align-items: unset;
+	margin-left: 0;
+}
+
+.score-standings .pl-avi {
+	grid-area: pl-avi;
+	margin-bottom: 0;
+}
+
+.score-standings .pl-name {
+	margin-top: .5rem;
+	font-size: 2rem;
+	width: max-content;
+}
+
+.score-standings .pl-score {
+	font-size: 1.75rem;
+}

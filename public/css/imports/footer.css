@@ -1,0 +1,11 @@
+.footer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+
+transform: rotate(180deg);
+}
+
+.footer img {
+    width: 100%;
+}

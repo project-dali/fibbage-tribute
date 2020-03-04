@@ -1,0 +1,23 @@
+/* clip-path for shape of timer */
+.timer{
+    -webkit-clip-path: polygon(0 85%, 100% 63%, 100% 100%, 0% 100%);
+clip-path: polygon(0 85%, 100% 63%, 100% 100%, 0% 100%);
+
+position: relative;
+    margin-left: auto;
+margin-right: auto;
+width: 250px;
+height: 70px;
+
+
+
+background: #90278E;
+transform-origin: bottom left;
+transition: all 1s ease-in-out;
+}
+
+/* on mouse hold = example of time running out */
+.timer:active{
+    transform: scale(0,.5);
+
+}

@@ -1,11 +1,42 @@
+/* @font-face {
+    font-family: "Avenir Next";
+    src: url("static/fonts/AvenirNextLTPro-Regular.woff2"),
+         url("static/fonts/AvenirNextLTPro-Regular.woff");
+    font-weight: 400;
+} */
+
+/* @font-face {
+    font-family: "Avenir Next";
+    src: url("fonts/AvenirNextLTPro-Bold.woff2"),
+         url("fonts/AvenirNextLTPro-Bold.woff");
+    font-weight: bold;
+} */
+
 /*  How to import all CSS files:  */
 /* @import url("imports/**.css"); */
 @import url("imports/debug-nav.css");
+@import url("imports/background.css");
+@import url("imports/banner.css");
+@import url("imports/footer.css");
+@import url("imports/buttons.css");
+@import url("imports/timers.css");
+@import url("imports/system-status.css");
+@import url("imports/hosting-instructions.css");
+@import url("imports/closed-captions.css");
+@import url("imports/pl-round-instructions.css");
+@import url("imports/join.css");
+@import url("imports/ranking.css");
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    font-family: McLaren;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    color: #F1F1F1;
 }
 
 :root {
@@ -37,7 +68,7 @@ html {
 body {
     width: 100%;
     height: auto;
-    background-color: #fff;
+    /* background-color: #fff; */
 }
 
 h1,
@@ -45,9 +76,11 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
     font-weight: bold;
     text-align: center;
+    color: white;
 }
 
 h1 {
@@ -79,8 +112,8 @@ h3 {
 }
 
 main {
-    --main-padding: 3rem;
-    height: 100%;
+    --main-padding: 15rem;
+    height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -98,26 +131,40 @@ button {
     box-shadow: none;
     border: none;
 
-    background-color: var(--gray-bg-color, LightGrey);
+    background-color: var(--gray-bg-color);
     font-size: 2.5rem;
     margin: 2rem 0;
     padding: 1rem 3rem;
+    color: #000;
+}
+
+button:disabled, button[disabled] {
+  background-color: #cccccc;
+  color: #666666;
+}
+
+input {
+    color: #000;
 }
 
 button:hover,
 button:active,
 button:focus {
     cursor: pointer;
-    background-color: var(--gray-bg-hover, gray);
+    background-color: var(--gray-bg-hover);
 }
 
 button:focus {
-    outline: 5px solid var(--thunk-pink, pink);
+    outline: 5px solid var(--thunk-pink);
+}
+
+.landing-instructions {
+    text-align: center;
 }
 
 /* Applies a gray background to the element */
-.box-gray {
-    background-color: var(--gray-bg-color, LightGrey);
+.closed-captions, .prompt, .switch-up-text, .room-code-display, .player-answer, .hightlighted-player .player-name {
+    background-color: var(--gray-bg-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -125,9 +172,16 @@ button:focus {
     text-align: center;
 }
 
-.box-gray * {
-    margin: 0;
-    text-align: center;
+.system-status {
+    width: 100%;
+}
+
+.closed-captions {
+    position: absolute;
+    top: 100vh; left: 50vw;
+    transform: translateY(-100%) translateX(-50%);
+    margin: 0 auto;
+    max-width: 60%;
 }
 
 .switch-up p {
@@ -138,49 +192,130 @@ button:focus {
 }
 
 .room-code-display {
-    position:absolute;
-    top:100vh; right: 0;
-    transform:translateY(-100%);
+    position: absolute;
+    height: 150px;
+    width: 150px;
+    top: 104vh;
+    right: 0;
+    transform: translateY(-100%);
     font-size: 1.5rem;
     font-weight: bold;
     display: flex;
     flex-direction: column;
+    border-radius: 200px;
+    background-color: var(--thunk-pink);
 }
 
 .round-progress-bar {
+    background-color: var(--gray-bg-color);
     width: 80vw;
     max-width: 60rem;
     height: 3rem;
     padding: 0;
-    margin-top: 3em;
+    margin: 3rem auto 0;
 }
 
 .timer-bar {
+    display: inline-block;
     height: 100%;
     width: 100%;
     background-color: var(--thunk-pink, pink);
 }
 
-/* ! Code from alpha static ------------------------------------ */
-
-#instructions {
-    max-width: 49.375rem;
-}
-
-#instructions>p {
-    font-size: 2.75rem;
-    line-height: 2;
-}
-
-#code,
-#prompt {
-    /* min-width: 40rem; */
-    max-width: 60rem;
-}
-
-#code>p {
-    font-size: 4.5rem;
+.round-start-counter {
+    --round-counter-size: 4rem;
+    background-color: var(--gray-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--round-counter-size);
+    height: var(--round-counter-size);
+    border-radius: 50%;
+    font-size: 2rem;
     font-weight: bold;
+}
+
+.primary {
+    width: 90%;
+}
+
+.response-select {
+    margin: 0 auto;
+}
+
+.submitted-responses {
+    width: 80%;
+    margin: 2rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-gap: 1em;
+}
+
+.response {
+    background-color: var(--gray-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    text-align: center;
+    padding: .5em;
+}
+
+label.response {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    margin: .5rem auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 14rem;
+}
+
+  /* Hide browser default checkboxes */
+.response input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.response-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: none;
+}
+
+.response input:checked ~ .response-checkbox {
+    border: 3px solid var(--thunk-pink);
+}
+
+input[type=submit] {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+
+    /* Clear defaults */
+    background: none;
+    box-shadow: none;
+    border: none;
+
+    background-color: var(--gray-bg-color);
+    font-size: 2rem;
+    padding: .5rem;
+
+    grid-column: 2/4;
+}
+
+input[type=submit]:hover, input[type=submit]:active, input[type=submit]:focus {
+    outline: 3px solid var(--thunk-pink);
+    cursor: pointer;
+    background-color: var(--gray-bg-hover);
 }
 
 #connected-players {
@@ -245,7 +380,330 @@ button:focus {
     background-color: var(--pl-purple, Purple);
 }
 
-/* ! ------------------------------------------------- */
+ /* ! -------------------------------------------------  */
+
+.pl-name {
+    font-weight: bold;
+}
+
+.hightlighted-player {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}   
+
+.player-avatar {
+    --avatar-size: 16rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: 50%;
+    background-color: var(--pl-green);
+}
+
+.player-answer, .hightlighted-player .player-name {
+    font-weight: bold;
+    font-size: 3em;
+    margin-top: 1rem;
+}
+
+/*.score-standings {
+    /~ display: grid;
+    grid-template-columns: repeat(2, 1fr); ~/
+    columns: 2;
+    width: 40rem;
+    margin: 2rem auto 0;
+    /~ grid-gap: 1rem; ~/
+    margin-bottom: 1rem;
+}
+
+ol {
+    list-style: none;
+    counter-reset: thunk-counter;
+}
+
+ol>li {
+    --counter-size: 1.75rem;
+    counter-increment: thunk-counter;
+    position: relative;
+    margin-left: calc(var(--counter-size) + .75rem);
+    min-height: var(--counter-size);
+    display: flex;
+    align-items: center;
+    margin-bottom: .5rem;
+}
+
+ol>li::before {
+    content: counter(thunk-counter);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    position: absolute;
+    left: calc(-1 * var(--counter-size) - .75rem);
+    line-height: var(--counter-size);
+    width: var(--counter-size);
+    height: var(--counter-size);
+    top: calc(50% - var(--counter-size)/2);
+    background: rgba(237, 29, 105, 0.3);;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.score-standings .player {
+    display: grid;
+    grid-template-columns: 5.25rem auto;
+    grid-template-rows: 2.25rem auto;
+    grid-template-areas:
+        "pl-avi pl-name"
+        "pl-avi pl-score";
+    width: 16rem;
+    grid-gap: 0.5rem;
+    align-items: unset;
+    margin-left: 0;
+}
+
+.score-standings .pl-avi {
+    grid-area: pl-avi;
+    margin-bottom: 0;
+}
+
+.score-standings .pl-name {
+    margin-top: .5rem;
+    font-size: 1.5rem;
+}
+
+.score-standings .pl-score {
+    font-size: 1.25rem;
+}*/
+
+.credit-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 0;
+}
+
+.credit-container .title {
+    align-self: end;
+}
+
+.credit-container .primary {
+    background-color: var(--thunk-pink);
+    grid-column: 1/2;
+    grid-row: 1/3;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.credit-container .cta {
+    align-self: start;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.credits {
+    animation: 40s linear 3s infinite credit-crawl;
+    transform: translateY(100vh);
+}
+
+@keyframes credit-crawl {
+    from { transform: translateY(100vh); }
+    to   { transform: translateY(-150vh);}
+}
+
+
+.member {
+    list-style: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: right;
+    margin-bottom: 1em;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 1.5rem;
+}
+
+.member-roles {
+    text-align: left;
+    font-size: 1.25rem;
+    font-weight: normal;
+    list-style: none;
+}
+
+.acknowledgements {
+    text-align: center;
+}
+
+.acknowledgements > h3 {
+    margin-bottom: 1rem;
+}
+
+.selected-avatar .player {
+    margin: 0 auto;
+    width: unset;
+}
+
+.selected-avatar .pl-avi {
+    --avi-size: 12rem;
+}
+
+.selected-avatar .pl-name {
+    font-size: 2em;
+}
+
+input[type=text] {
+    width: calc(100% - 4px); /* Width derived from accouting for focus outline */
+    height: 2.625rem;
+    background-color: var(--gray-bg-color, LightGrey);
+    border: none;
+    border: 2px solid #000;
+
+    text-align: center;
+    font-size: 1.5rem;
+    position: relative;
+    margin: 1rem auto;
+}
+
+input[type=text]:focus {
+    outline: 3px solid #000;
+}
+
+input[type=text]:invalid {
+    outline: 4px solid var(--pl-red, red);
+}
+
+@media screen and (max-width: 40rem) {
+    main {
+        overflow-y: hidden;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        font-size: 1.75rem;
+    }
+
+    .primary {
+        overflow-y: scroll;
+        width: 100%;
+    }
+
+    .switch-up p, .switch-up-text {
+        font-size: 1.5rem;
+    }
+
+    .submitted-responses {
+        display: block;
+        width: 100%;
+    }
+
+    input[type=submit] {
+        width: 80%;
+    }
+
+    .score-standings {
+        columns: 1;
+        width: unset;
+    }
+}
+
+/* ! Code from alpha static ------------------------------------ */
+
+/*#instructions {
+    max-width: 49.375rem;
+}
+
+#instructions>p {
+    font-size: 2.75rem;
+    line-height: 2;
+}
+
+#code,
+#prompt {
+    /~ min-width: 40rem; ~/
+    max-width: 60rem;
+}
+
+#code>p {
+    font-size: 4.5rem;
+    font-weight: bold;
+}
+
+#connected-players {
+    max-width: 90%;
+    height: 17rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.player {
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.pl-avi {
+    --avi-size: 5.25rem;
+    content: "";
+    display: block;
+    width: var(--avi-size);
+    height: var(--avi-size);
+    background-color: #000;
+    margin-bottom: .25rem;
+    border-radius: 50%;
+}
+
+/~ ! Remove this once avatar selection feauture is created ~/
+#player-1>.pl-avi {
+    background-color: var(--pl-red, Red);
+}
+
+#player-2>.pl-avi {
+    background-color: var(--pl-orange, Orange);
+}
+
+#player-3>.pl-avi {
+    background-color: var(--pl-yellow, Yellow);
+}
+
+#player-4>.pl-avi {
+    background-color: var(--pl-green, Green);
+}
+
+#player-5>.pl-avi {
+    background-color: var(--pl-blue, Blue);
+}
+
+#player-6>.pl-avi {
+    background-color: var(--pl-mediumBlue, CornflowerBlue);
+}
+
+#player-7>.pl-avi {
+    background-color: var(--pl-lightGreen, LightGreen);
+}
+
+#player-8>.pl-avi {
+    background-color: var(--pl-purple, Purple);
+}
+
+/~ ! ------------------------------------------------- ~/
 
 .pl-name {
     font-weight: bold;
@@ -356,7 +814,7 @@ button:focus {
 
 #pl-winner {
     margin-top: 10rem;
-    /* justify-self: center does not work for flex, find solution to vertically center */
+    /~ justify-self: center does not work for flex, find solution to vertically center ~/
 }
 
 #pl-winner .player {
@@ -412,7 +870,7 @@ button:focus {
     list-style: none;
 }
 
-/* * -------- Player Screen Styles -------- */
+/~ * -------- Player Screen Styles -------- ~/
 @media screen and (max-width: 26rem) {
     h1 {
         font-size: 3.5rem;
@@ -453,7 +911,7 @@ button:focus {
     input[type=submit] {
         width: 15rem;
 
-        /* Clear defaults */
+        /~ Clear defaults ~/
         background: none;
         box-shadow: none;
         border: none;
@@ -484,7 +942,7 @@ button:focus {
         position: relative;
         width: var(--avi-sel-size);
         height: var(--avi-sel-size);
-        /* background-color: #000; */
+        /~ background-color: #000; ~/
         cursor: pointer;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -492,7 +950,7 @@ button:focus {
         user-select: none;
     }
 
-    /* Hide browswer default radio */
+    /~ Hide browswer default radio ~/
     .avi-opt input {
         position: absolute;
         opacity: 0;
@@ -501,7 +959,7 @@ button:focus {
         width: 0;
     }
 
-    /* Create custom radio */
+    /~ Create custom radio ~/
     .avi-check {
         position: absolute;
         top: 0;
@@ -677,7 +1135,7 @@ button:focus {
         width: 14rem;
     }
 
-    /* Hide browser default checkboxes */
+    /~ Hide browser default checkboxes ~/
     .resp-opt input {
         position: absolute;
         opacity: 0;
@@ -766,4 +1224,88 @@ button:focus {
     .player-rank .pl-name {
         font-size: 1.5rem;
     }
+}*/
+
+#promptArea {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+}
+
+.hostPrompt {
+    flex-grow: 1;
+    width: 100%;
+    text-align: center;
+}
+
+.hostPrompt h2, #btnPlayerRestart h3 {
+    font-size: 161px;
+    line-height: 1em;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+}
+
+#promptBut {
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+#hostSwitchUp {
+    display: none;
+}
+
+#playerInfos {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.playerInfo {
+    padding: 0;
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    display: flex;
+}
+
+.playerInfo:nth-child(odd) {
+    text-align: left;
+    flex-direction: row;
+}
+
+.playerInfo:nth-child(even) {
+    text-align: right;
+    flex-direction: row-reverse;
+}
+
+.playerInfo div {
+    font-size: 1.4EM;
+    padding: 10px;
+    margin: 0;
+}
+
+.playerInfo .playerScore {
+    text-align: center;
+    background-color: #A8FF56;
+    max-width: 40px;
+    width: 10%;
+}
+
+.playerInfo .playerName {
+    background-color: #ECFFE0;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.team-members {
+    color: #000 !important;
 }

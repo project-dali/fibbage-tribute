@@ -1,0 +1,22 @@
+.debug-nav-container {
+    position:absolute;
+    top:100vh; left: 0;
+    transform:translateY(-100%);
+    z-index: 10;
+}
+
+.debug-nav {
+    display: none;
+}
+
+.debug-nav .submit-button {
+    font-size: 1.5rem;
+    margin: 0 1rem;
+    padding: 1rem 1.5rem;
+}
+
+.debug-nav-container .plus-button {
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 1rem 1.5rem;
+}

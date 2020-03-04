@@ -1,0 +1,130 @@
+/* Layout for Master Prompt Instructions */
+
+.instructionheader{
+    font-family: Avenir LT Std, 'Lato', sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 3em;
+line-height: 125%;
+text-align: center;
+position: relative;
+margin-left: auto;
+margin-right: auto;
+top: 11.75em;
+
+color: #ED1B69;
+
+}
+
+.instructiontext{
+    margin-left: auto;
+margin-right: auto;
+text-align: center;
+    top: 12.5em;
+    position: relative;
+font-family: McLaren;
+font-style: normal;
+font-weight: normal;
+font-size: 2.25em;
+line-height: 2.9em;
+
+
+color: #E6E6E6;
+
+}
+
+
+.promptstyle1{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+margin-left: auto;
+margin-right: auto;
+margin-top: 18.75em;
+
+background: #ED1D69;
+border-radius: 1.56em 5.5em 5.81em 7.5em;
+height: 17em;
+width: 47em;
+z-index: 20;
+}
+
+p.prompttext1{
+    font-family: Avenir LT Std, 'Lato', sans-serif;
+    font-style: normal;
+font-weight: bold;
+font-size: 4em;
+line-height: 125%;
+/* or 5em */
+padding-top: 6.25em;
+
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.butbox{
+    position: relative;
+    width: 8.56em;
+    height: 3.25em;
+    margin-left: auto;
+margin-right: auto;
+margin-top: -3.23em;
+background: #82287E;
+border-radius: .69em;
+z-index: 20;
+}
+
+p.buttext{
+    font-family: Avenir LT Std, 'Lato', sans-serif;
+font-style: normal;
+font-weight: bold;
+font-size: 1.5em;
+line-height: 125%;
+/* or 1.875em */
+padding-top: .75em;
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.promptstyle2{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+clip-path: polygon(0 0, 100% 14%, 94% 100%, 9% 100%);
+margin-left: auto;
+margin-right: auto;
+margin-top: 1.56em;
+transform: scaleX(-1);
+background: #ED1D69;
+border-radius: 1.563em 3.125em 4.69em 5.375em;
+height: 11.49em;
+width: 29.85em;
+z-index: 20;
+}
+
+p.prompttext2{
+    font-family: Avenir LT Std, 'Lato', sans-serif;
+    font-style: normal;
+font-weight: bold;
+font-size: 2.25em;
+line-height: 5em;
+padding-top: 2.2em;
+transform: scaleX(-1);
+text-align: center;
+
+color: #FFFFFF;
+z-index: 30;
+}
+
+.barstyle{ position: relative;
+    -webkit-clip-path: polygon(0 0, 100% 0, 61% 100%, 44% 100%);
+clip-path: polygon(0 0, 100% 0, 61% 100%, 44% 100%);
+background: rgba(196, 196, 196, 0.6);
+width: 2.875em;
+height: 56.125em;
+margin-left: auto;
+margin-right: auto;
+margin-top: -3.125em;
+z-index: 10;
+}
